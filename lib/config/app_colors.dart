@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+//图标颜色 #2fc9ae
 
 class AppColors {
   static const Color primary = Color(0xfffbfbfb);
@@ -12,6 +13,8 @@ class AppColors {
   static const Color info = Color(0xff00a1d6);
 
   static const Color active = Color(0xff464646);
+
+  static const Color navActive = Color.fromRGBO(84, 184, 199, 1);
 
   static const Color unactive = Color(0xff7b7b7b);
 

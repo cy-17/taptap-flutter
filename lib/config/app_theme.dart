@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:taptap/config/app_colors.dart';
+
+import 'app_colors.dart';
 
 final ThemeData themeData = ThemeData(
     scaffoldBackgroundColor: AppColors.page,
@@ -16,6 +17,6 @@ final ThemeData themeData = ThemeData(
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: AppColors.nav,
-        selectedItemColor: AppColors.active,
+        selectedItemColor: AppColors.navActive,
         unselectedItemColor: AppColors.unactive,
         selectedLabelStyle: TextStyle(fontSize: 15)));
