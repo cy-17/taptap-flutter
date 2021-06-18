@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-//图标颜色 #2fc9ae
+//图标颜色 #54B6C4
 
 class AppColors {
   static const Color primary = Color(0xfffbfbfb);

@@ -17,7 +17,6 @@ class _RecommendPageState extends State<RecommendPage> {
   late ScrollController _scrollController;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _scrollController = new ScrollController();
     _gameList.add(Game(
@@ -68,7 +67,7 @@ class GameCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      height: 280,
+      height: 250,
       child: Column(children: [
         ClipRRect(
           borderRadius: BorderRadius.only(
@@ -76,62 +75,11 @@ class GameCard extends StatelessWidget {
           child: Image.network(
             game.gamePictureUrl,
             width: double.infinity,
-            height: 180,
+            height: 160,
             fit: BoxFit.cover,
           ),
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: Row(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    game.gameName,
-                    style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black),
-                  ),
-                  SizedBox(
-                    height: 1,
-                  ),
-                  Container(
-                    constraints: BoxConstraints(maxWidth: 300),
-                    child: Text(
-                      game.category,
-                      style: TextStyle(fontSize: 15),
-                      textAlign: TextAlign.left,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ],
-              ),
-              Spacer(),
-              Padding(
-                padding: EdgeInsets.only(bottom: 13, left: 10),
-                child: Column(
-                  children: [
-                    Image.asset(
-                      "assets/images/home/recommend/taptap.jpg",
-                      width: 50,
-                      height: 50,
-                    ),
-                    Text(
-                      "${game.score}",
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.navActive),
-                    )
-                  ],
-                ),
-              )
-            ],
-          ),
-        )
+        _GameDescription(game: game)
       ]),
       decoration: BoxDecoration(
           // 底色
@@ -142,6 +90,73 @@ class GameCard extends StatelessWidget {
               color: Color(0xFFF7F7F7),
             ),
           ], borderRadius: BorderRadius.circular(19), color: Colors.white),
+    );
+  }
+}
+
+class _GameDescription extends StatelessWidget {
+  const _GameDescription({
+    Key? key,
+    required this.game,
+  }) : super(key: key);
+
+  final Game game;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      child: Row(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                game.gameName,
+                style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black),
+              ),
+              SizedBox(
+                height: 1,
+              ),
+              Container(
+                constraints: BoxConstraints(maxWidth: 260),
+                child: Text(
+                  game.category,
+                  style: TextStyle(fontSize: 15),
+                  textAlign: TextAlign.left,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+          Spacer(),
+          Padding(
+            padding: EdgeInsets.only(bottom: 20, right: 10, left: 10),
+            child: Column(
+              children: [
+                Container(
+                  width: 45,
+                  height: 45,
+                  child: Image.asset(
+                    "assets/images/home/recommend/taptap.jpg",
+                  ),
+                ),
+                Text(
+                  "${game.score}",
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.navActive),
+                )
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }

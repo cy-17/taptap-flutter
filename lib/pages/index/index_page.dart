@@ -13,7 +13,6 @@ class _IndexPageState extends State<IndexPage> {
   int _currntIndex = 0;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     CONSTUtil.bottomNames.forEach((key, value) {
       _bottomNavBarItemList.add(_bottomNavBarItem(key, value));
