@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:TapTap/config/app_colors.dart';
 import 'package:TapTap/entity/game_entity.dart';
+import 'package:TapTap/pages/index/home/game_description/game_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 
@@ -65,31 +66,37 @@ class GameCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      height: 250,
-      child: Column(children: [
-        ClipRRect(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-          child: Image.network(
-            game.gamePictureUrl,
-            width: double.infinity,
-            height: 160,
-            fit: BoxFit.cover,
-          ),
-        ),
-        _GameDescription(game: game)
-      ]),
-      decoration: BoxDecoration(
-          // 底色
-          boxShadow: [
-            BoxShadow(
-              blurRadius: 15, //阴影范围
-              spreadRadius: 8, //阴影浓度
-              color: Color(0xFFF7F7F7),
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => GameDetail()));
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        height: 250,
+        child: Column(children: [
+          ClipRRect(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+            child: Image.network(
+              game.gamePictureUrl,
+              width: double.infinity,
+              height: 160,
+              fit: BoxFit.cover,
             ),
-          ], borderRadius: BorderRadius.circular(19), color: Colors.white),
+          ),
+          _GameDescription(game: game)
+        ]),
+        decoration: BoxDecoration(
+            // 底色
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 15, //阴影范围
+                spreadRadius: 8, //阴影浓度
+                color: Color(0xFFF7F7F7),
+              ),
+            ], borderRadius: BorderRadius.circular(19), color: Colors.white),
+      ),
     );
   }
 }

@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:TapTap/common_widget/loading_diglog.dart';
+import 'package:TapTap/common_widget/pinput_dialog.dart';
 import 'package:TapTap/config/app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +14,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool _checkBox = true;
-
   var _textController;
 
   @override
@@ -131,11 +133,23 @@ class _LoginPageState extends State<LoginPage> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8)),
                           onPressed: () {
+                            //1.展示加载框
                             showDialog(
                                 context: context,
                                 builder: (context) {
                                   return new LoadingDialog();
                                 });
+                            Timer.periodic(Duration(seconds: 1), (timer) {
+                              timer.cancel();
+                              Navigator.pop(context);
+
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return PinPutDialog(
+                                        phone: _textController.text);
+                                  });
+                            });
                           },
                           elevation: 2.0,
                           fillColor: AppColors.navActive,
