@@ -1,7 +1,7 @@
 import 'package:TapTap/common_widget/comment_card.dart';
 import 'package:TapTap/common_widget/score_description.dart';
-import 'package:TapTap/common_widget/tag_widget.dart';
 import 'package:TapTap/config/app_colors.dart';
+import 'package:TapTap/pages/index/home/comment_page/write_comment_page.dart';
 import 'package:flutter/material.dart';
 
 class CommentPage extends StatefulWidget {
@@ -16,7 +16,10 @@ class _CommentPageState extends State<CommentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => WriteCommentPage()));
+        },
         backgroundColor: AppColors.navActive,
         child: Icon(Icons.border_color),
       ),
@@ -27,14 +30,19 @@ class _CommentPageState extends State<CommentPage> {
           ),
           Row(
             children: [
-              Icon(
-                Icons.keyboard_arrow_left,
-                color: Colors.grey.withOpacity(0.8),
-                size: 35,
+              InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Icon(
+                  Icons.keyboard_arrow_left,
+                  color: Colors.grey,
+                  size: 35,
+                ),
               ),
               Text(
                 "评分 & 评价",
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(color: Colors.black, fontSize: 17),
               ),
             ],
           ),
@@ -49,6 +57,27 @@ class _CommentPageState extends State<CommentPage> {
             height: 20,
           ),
           ScoreDescriptionBelow(),
+          SizedBox(
+            height: 20,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              children: [
+                Text(
+                  "我的评价",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 23,
+                      fontWeight: FontWeight.w900),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          CommentCard(),
           SizedBox(
             height: 20,
           ),

@@ -1,10 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:TapTap/common_widget/loading_diglog.dart';
 import 'package:TapTap/config/app_colors.dart';
-import 'package:TapTap/pages/index/home/home_page.dart';
 import 'package:TapTap/pages/index/index_page.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class RegisterPage extends StatefulWidget {
   final String phone;
@@ -16,6 +17,21 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   var _textController;
+  late File _image;
+  final picker = ImagePicker();
+  bool _visible = true;
+  Future getImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+        _visible = false;
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
 
   @override
   void initState() {
@@ -28,13 +44,14 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
           "填写昵称",
           style: TextStyle(
               color: Colors.black, fontSize: 18, fontWeight: FontWeight.w800),
         ),
-        backgroundColor: AppColors.primary,
+        backgroundColor: Colors.white,
         centerTitle: true,
         leading: InkWell(
           child: Icon(
@@ -54,12 +71,45 @@ class _RegisterPageState extends State<RegisterPage> {
             Padding(
               padding: const EdgeInsets.all(40.0),
               child: Center(
-                child: ClipOval(
-                  child: Image.network(
-                    "https://img2.baidu.com/it/u=1995235764,179833910&fm=26&fmt=auto&gp=0.jpg",
-                    fit: BoxFit.cover,
-                    width: 70,
-                  ),
+                child: Stack(
+                  children: [
+                    ClipOval(
+                      child: InkWell(
+                        onTap: () {
+                          getImage();
+                        },
+                        child: Container(
+                          child: _visible
+                              ? Image.network(
+                                  "https://img2.baidu.com/it/u=1995235764,179833910&fm=26&fmt=auto&gp=0.jpg",
+                                  fit: BoxFit.cover,
+                                  width: 70,
+                                  height: 70,
+                                )
+                              : Image.file(
+                                  _image,
+                                  fit: BoxFit.cover,
+                                  width: 70,
+                                  height: 70,
+                                ),
+                        ),
+                      ),
+                    ),
+                    ClipOval(
+                      child: Container(
+                        width: 30,
+                        height: 30,
+                        color: Color.fromRGBO(246, 247, 249, 1),
+                        child: Center(
+                          child: Icon(
+                            Icons.create,
+                            color: AppColors.navActive,
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                  alignment: Alignment.bottomRight,
                 ),
               ),
             ),
@@ -95,12 +145,13 @@ class _RegisterPageState extends State<RegisterPage> {
                         builder: (context) {
                           return new LoadingDialog();
                         });
-                    Timer.periodic(Duration(seconds: 1), (timer) {
-                      timer.cancel();
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (context) => IndexPage()),
-                          (route) => false);
-                    });
+
+                    // Timer.periodic(Duration(seconds: 1), (timer) {
+
+                    //   Navigator.of(context).pushAndRemoveUntil(
+                    //       MaterialPageRoute(builder: (context) => IndexPage()),
+                    //       (route) => false);
+                    // });
                   },
                   elevation: 2.0,
                   fillColor: _textController.text.length == 0

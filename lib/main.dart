@@ -36,7 +36,6 @@ class _State extends State<_TransitPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       this.setState(() {

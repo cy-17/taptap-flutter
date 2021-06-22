@@ -11,6 +11,9 @@ class DiscoverPage extends StatefulWidget {
 class _DiscoverPageState extends State<DiscoverPage> {
   @override
   Widget build(BuildContext context) {
-    return PinPutDialog(phone: "19860209493");
+    return PinPutDialog(
+      phone: "19860209493",
+      context: context,
+    );
   }
 }

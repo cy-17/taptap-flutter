@@ -1,8 +1,7 @@
-import 'dart:async';
-
 import 'package:TapTap/common_widget/loading_diglog.dart';
 import 'package:TapTap/common_widget/pinput_dialog.dart';
 import 'package:TapTap/config/app_colors.dart';
+import 'package:TapTap/dao/user_service.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -15,6 +14,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool _checkBox = true;
   var _textController;
+  String errMsg = "";
 
   @override
   void initState() {
@@ -41,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           children: [
             Flexible(
-                flex: 846,
+                flex: 1000,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -115,6 +115,20 @@ class _LoginPageState extends State<LoginPage> {
                         ],
                       ),
                     ),
+                    errMsg.length > 0
+                        ? Row(
+                            children: [
+                              SizedBox(
+                                width: 45,
+                              ),
+                              Text(
+                                errMsg,
+                                style:
+                                    TextStyle(color: Colors.red, fontSize: 13),
+                              ),
+                            ],
+                          )
+                        : Container(),
                     Row(
                       children: [
                         SizedBox(
@@ -128,27 +142,44 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     Center(
                       child: Padding(
-                        padding: EdgeInsets.only(top: 45, bottom: 5),
+                        padding: EdgeInsets.only(top: 35, bottom: 5),
                         child: RawMaterialButton(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8)),
                           onPressed: () {
+                            if (_textController.text == "") {
+                              this.setState(() {
+                                errMsg = "手机号码不能为空";
+                              });
+                              return;
+                            }
                             //1.展示加载框
                             showDialog(
                                 context: context,
                                 builder: (context) {
                                   return new LoadingDialog();
                                 });
-                            Timer.periodic(Duration(seconds: 1), (timer) {
-                              timer.cancel();
-                              Navigator.pop(context);
-
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return PinPutDialog(
-                                        phone: _textController.text);
-                                  });
+                            UserService.userLogin(_textController.text)
+                                .then((value) {
+                              if (value.code == 1) {
+                                this.setState(() {
+                                  errMsg = "";
+                                });
+                                Navigator.pop(context);
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return PinPutDialog(
+                                        phone: _textController.text,
+                                        context: context,
+                                      );
+                                    });
+                              } else {
+                                this.setState(() {
+                                  errMsg = value.message;
+                                });
+                                Navigator.pop(context);
+                              }
                             });
                           },
                           elevation: 2.0,

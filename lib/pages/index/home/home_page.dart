@@ -1,5 +1,6 @@
 import 'package:TapTap/config/app_colors.dart';
 import 'package:TapTap/pages/index/Login/login_page.dart';
+import 'package:TapTap/pages/index/user/userCenter_page.dart';
 import 'package:TapTap/util/CONSTUtil.dart';
 import 'package:flutter/material.dart';
 
@@ -77,9 +78,18 @@ class _DrawerListView extends StatelessWidget {
         UserAccountsDrawerHeader(
           otherAccountsPicturesSize: Size.square(25),
           otherAccountsPictures: [
-            Image.asset(
-              "assets/images/home/drawer/drawer_saoyisao.png",
-              fit: BoxFit.cover,
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        settings: RouteSettings(name: "homePage"),
+                        builder: (context) => UserCenterPage()));
+              },
+              child: Image.asset(
+                "assets/images/home/drawer/drawer_saoyisao.png",
+                fit: BoxFit.cover,
+              ),
             )
           ],
           //用户信息栏

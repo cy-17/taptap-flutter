@@ -258,17 +258,23 @@ class _GameDetailState extends State<GameDetail> {
                 height: 20,
                 color: Colors.grey.withOpacity(0.5),
               ),
-              Row(
-                children: [
-                  Icon(
-                    Icons.star_border_rounded,
-                    color: AppColors.navActive,
-                  ),
-                  Text(
-                    "评价519",
-                    style: TextStyle(color: Colors.black, fontSize: 18),
-                  )
-                ],
+              InkWell(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => CommentPage()));
+                },
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.star_border_rounded,
+                      color: AppColors.navActive,
+                    ),
+                    Text(
+                      "评价519",
+                      style: TextStyle(color: Colors.black, fontSize: 18),
+                    )
+                  ],
+                ),
               ),
               Container(
                 width: 1,
