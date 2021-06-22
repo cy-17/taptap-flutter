@@ -1,7 +1,7 @@
 import 'package:TapTap/common_widget/loading_diglog.dart';
 import 'package:TapTap/common_widget/pinput_dialog.dart';
 import 'package:TapTap/config/app_colors.dart';
-import 'package:TapTap/dao/user_service.dart';
+import 'package:TapTap/service/user_service.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {

@@ -1,9 +1,8 @@
 class UserInfo {
-  final int userId;
-  final String userNickName;
-  final String userPhoneNumber;
-  final String userCoverUrl;
+  int? userId;
+  String userNickName;
+  String userPhoneNumber;
+  String userCoverUrl;
 
-  UserInfo(
-      this.userId, this.userNickName, this.userPhoneNumber, this.userCoverUrl);
+  UserInfo(this.userNickName, this.userPhoneNumber, this.userCoverUrl);
 }

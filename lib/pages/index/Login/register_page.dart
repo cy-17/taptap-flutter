@@ -3,7 +3,10 @@ import 'dart:io';
 
 import 'package:TapTap/common_widget/loading_diglog.dart';
 import 'package:TapTap/config/app_colors.dart';
+import 'package:TapTap/entity/user_info.dart';
 import 'package:TapTap/pages/index/index_page.dart';
+import 'package:TapTap/service/user_service.dart';
+import 'package:TapTap/util/GlobalData.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -145,6 +148,38 @@ class _RegisterPageState extends State<RegisterPage> {
                         builder: (context) {
                           return new LoadingDialog();
                         });
+                    if (_visible) {
+                      UserInfo userInfo = UserInfo(
+                          _textController.text,
+                          widget.phone,
+                          "https://img2.baidu.com/it/u=1995235764,179833910&fm=26&fmt=auto&gp=0.jpg");
+                      UserService.register(userInfo).then((value) {
+                        if (value.code == 1) {
+                          GlobalData.userInfo = userInfo;
+                        }
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      });
+                    } else {
+                      UserService.uploadFile(_image.path).then((value) {
+                        if (value.code != 1) {
+                          Navigator.pop(context);
+                        } else {
+                          UserInfo userInfo = UserInfo(_textController.text,
+                              widget.phone, value.map['url']);
+                          UserService.register(userInfo).then((value) {
+                            if (value.code == 1) {
+                              GlobalData.userInfo = userInfo;
+                              print(GlobalData.userInfo.toString());
+                            }
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          });
+                        }
+                      });
+                    }
 
                     // Timer.periodic(Duration(seconds: 1), (timer) {
 

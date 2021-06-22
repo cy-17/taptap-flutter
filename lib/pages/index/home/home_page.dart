@@ -2,6 +2,7 @@ import 'package:TapTap/config/app_colors.dart';
 import 'package:TapTap/pages/index/Login/login_page.dart';
 import 'package:TapTap/pages/index/user/userCenter_page.dart';
 import 'package:TapTap/util/CONSTUtil.dart';
+import 'package:TapTap/util/GlobalData.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -22,7 +23,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _tabController.dispose();
   }
@@ -31,6 +31,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
+      onDrawerChanged: (open) {
+        this.setState(() {});
+      },
       drawer: _HomeDrawer(),
       appBar: AppBar(
         leadingWidth: 0,
@@ -63,11 +66,14 @@ class _HomeDrawer extends StatelessWidget {
   }
 }
 
-class _DrawerListView extends StatelessWidget {
-  const _DrawerListView({
-    Key? key,
-  }) : super(key: key);
+class _DrawerListView extends StatefulWidget {
+  _DrawerListView({Key? key}) : super(key: key);
 
+  @override
+  __DrawerListViewState createState() => __DrawerListViewState();
+}
+
+class __DrawerListViewState extends State<_DrawerListView> {
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -94,7 +100,9 @@ class _DrawerListView extends StatelessWidget {
           ],
           //用户信息栏
           accountName: Text(
-            "点击头像登陆",
+            GlobalData.userInfo == null
+                ? "点击头像登陆"
+                : GlobalData.userInfo!.userNickName,
             style: TextStyle(
                 color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900),
           ),
@@ -105,11 +113,22 @@ class _DrawerListView extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => LoginPage()));
             },
             child: CircleAvatar(
-                //头像
-                backgroundImage:
-                    AssetImage("assets/images/home/drawer/loginImage.png")
-                //图片不变性裁剪居中显示
-                ),
+              child: GlobalData.userInfo != null
+                  ? ClipOval(
+                      child: Image.network(
+                        GlobalData.userInfo!.userCoverUrl,
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  : ClipOval(
+                      child: Image.asset(
+                          "assets/images/home/drawer/loginImage.png",
+                          fit: BoxFit.cover),
+                    ),
+              //头像
+
+              //图片不变性裁剪居中显示
+            ),
           ),
 
           onDetailsPressed: () {}, //下拉箭头
@@ -425,6 +444,40 @@ class _DrawerListView extends StatelessWidget {
             ],
           ),
         ),
+        GlobalData.userInfo != null
+            ? InkWell(
+                onTap: () {
+                  this.setState(() {
+                    GlobalData.userInfo = null;
+                  });
+                },
+                child: ListTile(
+                  title: Row(
+                    children: [
+                      Image.asset(
+                        "assets/images/home/drawer/drawer_version.png",
+                        width: 25,
+                        height: 25,
+                        fit: BoxFit.cover,
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 4.0),
+                        child: Text(
+                          '退出登录',
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            : Container(),
       ],
     );
   }
@@ -452,7 +505,9 @@ class _PersonImage extends StatelessWidget {
         },
         child: ClipOval(
           child: Image.network(
-              "https://img0.baidu.com/it/u=2456468987,3284231714&fm=26&fmt=auto&gp=0.jpg",
+              GlobalData.userInfo == null
+                  ? "https://cyw-file.oss-cn-beijing.aliyuncs.com/loginImage.png"
+                  : GlobalData.userInfo!.userCoverUrl,
               fit: BoxFit.cover),
         ),
       ),

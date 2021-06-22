@@ -1,5 +1,6 @@
 import 'package:TapTap/pages/index/discover/discover_page.dart';
 import 'package:TapTap/pages/index/home/home_page.dart';
+import 'package:TapTap/pages/index/home/rank/rank_page.dart';
 import 'package:TapTap/pages/index/home/recommend_page.dart';
 import 'package:TapTap/pages/index/user/userCenter_page.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,7 @@ class CONSTUtil {
   static List<Widget> tabContent = [
     RecommendPage(),
     RecommendPage(),
-    RecommendPage(),
+    RankPage(),
     RecommendPage(),
   ];
 }

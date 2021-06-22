@@ -364,141 +364,167 @@ class _CommentCard extends StatefulWidget {
 class __CommentCardState extends State<_CommentCard> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      width: MediaQuery.of(context).size.width - 20,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 12, left: 5),
-                  child: ClipOval(
-                    child: Image.network(
-                      "https://img1.baidu.com/it/u=2697754602,2032230362&fm=26&fmt=auto&gp=0.jpg",
-                      fit: BoxFit.cover,
-                      width: 50,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.white,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
                   children: [
-                    Text(
-                      "菲菲-颜子-小丽",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w800),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12, left: 5),
+                      child: ClipOval(
+                        child: Image.network(
+                          "https://img1.baidu.com/it/u=2697754602,2032230362&fm=26&fmt=auto&gp=0.jpg",
+                          fit: BoxFit.cover,
+                          width: 50,
+                        ),
+                      ),
                     ),
-                    Text("2天前",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12,
-                        )),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "菲菲-颜子-小丽",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w800),
+                        ),
+                        Text("2天前",
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                            )),
+                      ],
+                    ),
                   ],
                 ),
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 18),
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(10)),
-            child: Row(
-              children: [
-                Container(
-                  width: 50,
-                  height: 50,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.network(
-                      "https://img2.baidu.com/it/u=3179073811,4006045172&fm=26&fmt=auto&gp=0.jpg",
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 14),
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    color: Colors.grey.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(10)),
+                child: Row(
                   children: [
-                    Text(
-                      "无极仙途",
-                      style: TextStyle(color: Colors.black, fontSize: 12),
+                    Container(
+                      width: 50,
+                      height: 50,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.network(
+                          "https://img2.baidu.com/it/u=3179073811,4006045172&fm=26&fmt=auto&gp=0.jpg",
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
-                    Text(
-                      "1.9+评价  帖子1.8万+",
-                      style: TextStyle(color: Colors.grey, fontSize: 12),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "无极仙途",
+                          style: TextStyle(color: Colors.black, fontSize: 12),
+                        ),
+                        Text(
+                          "1.9+评价  帖子1.8万+",
+                          style: TextStyle(color: Colors.grey, fontSize: 12),
+                        )
+                      ],
                     )
                   ],
-                )
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 11),
-            child: Row(
-              children: [
-                Text(
-                  "评分",
-                  style: TextStyle(
-                      color: AppColors.navActive,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600),
                 ),
-                SizedBox(
-                  width: 6,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 5, horizontal: 11),
+                child: Row(
+                  children: [
+                    Text(
+                      "评分",
+                      style: TextStyle(
+                          color: AppColors.navActive,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    SizedBox(
+                      width: 6,
+                    ),
+                    Row(children: DrawUtil.getStarOnly(5)),
+                  ],
                 ),
-                Row(children: DrawUtil.getStarOnly(5)),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 12.0, bottom: 1),
-            child: Text(
-              "   感谢育碧的邀请，让我们得以提前试玩了《彩虹六号：异种》。作为脱胎于前作“围攻”内特殊模式的系列新作，本次的”异种“在保留以往优秀射击手感和诸多特色元素的同时，将主题从反恐对抗变成了合作共斗。尽管区区一个下午的试玩并没能让我窥得本作全貌，却依然获得了一些值得和大家分享的信息。以下，就是我本次的试玩体验。Ps：本次试玩为Demo版本，并不代表游戏上市后最终素质",
-              maxLines: 7,
-              textAlign: TextAlign.left,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                  color: Colors.black,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 12.0, bottom: 1, top: 5),
+                child: Text(
+                  "   感谢育碧的邀请，让我们得以提前试玩了《彩虹六号：异种》。作为脱胎于前作“围攻”内特殊模式的系列新作，本次的”异种“在保留以往优秀射击手感和诸多特色元素的同时，将主题从反恐对抗变成了合作共斗。尽管区区一个下午的试玩并没能让我窥得本作全貌，却依然获得了一些值得和大家分享的信息。以下，就是我本次的试玩体验。Ps：本次试玩为Demo版本，并不代表游戏上市后最终素质",
+                  maxLines: 7,
+                  textAlign: TextAlign.left,
                   overflow: TextOverflow.ellipsis,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500),
-            ),
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Icon(Icons.share),
+                  style: TextStyle(
+                      color: Colors.black,
+                      overflow: TextOverflow.ellipsis,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Container(
+                    width: 25,
+                    height: 25,
+                    child: Center(
+                      child: Image.asset("assets/images/home/share.png"),
+                    ),
+                  ),
+                  Flexible(flex: 1, child: Container()),
+                  Icon(
+                    Icons.comment_bank,
+                    color: Colors.grey.withOpacity(0.6),
+                  ),
+                  Flexible(flex: 1, child: Container()),
+                  Icon(Icons.thumb_up, color: Colors.grey.withOpacity(0.6)),
+                  Spacer(),
+                  Flexible(flex: 2, child: Container()),
+                  Icon(Icons.more_vert, color: Colors.grey.withOpacity(0.6))
+                ],
+              ),
+              SizedBox(
+                height: 12,
+              ),
             ],
           ),
-          SizedBox(
-            height: 12,
-          ),
-        ],
-      ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text("暂无更多"),
+        )
+      ],
     );
   }
 }

@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:TapTap/config/app_colors.dart';
-import 'package:TapTap/dao/user_service.dart';
+import 'package:TapTap/entity/user_info.dart';
 import 'package:TapTap/pages/index/Login/register_page.dart';
+import 'package:TapTap/service/user_service.dart';
+import 'package:TapTap/util/GlobalData.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:pinput/pin_put/pin_put.dart';
@@ -113,6 +115,10 @@ class _PinPutDialogState extends State<PinPutDialog> {
                           this.setState(() {});
                           if (value.code == 1) {
                             _timer.cancel();
+                            GlobalData.userInfo = UserInfo(
+                                value.map["user"]['userNickName'],
+                                value.map["user"]['userPhoneNumber'],
+                                value.map["user"]['userCoverUrl']);
                             Navigator.pop(context);
                             Navigator.pop(context);
                             Navigator.pop(context);
