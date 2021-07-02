@@ -2,25 +2,55 @@ import 'dart:async';
 import 'dart:io';
 import 'package:TapTap/common_widget/loading_diglog.dart';
 import 'package:TapTap/config/app_colors.dart';
+import 'package:TapTap/service/comment_service.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class WriteCommentPage extends StatefulWidget {
-  const WriteCommentPage({Key? key}) : super(key: key);
-
+  const WriteCommentPage({Key? key, required this.gameId}) : super(key: key);
+  final int gameId;
   @override
   _WriteCommentPageState createState() => _WriteCommentPageState();
 }
 
 class _WriteCommentPageState extends State<WriteCommentPage> {
   String model = "未知型号";
-
   bool _switch = false;
+  var _textController = TextEditingController();
+  double socre = 0;
   @override
   void initState() {
     super.initState();
     getDeviceInfo();
+  }
+
+  showAlertDialog(BuildContext context) {
+    //设置按钮
+    Widget okButton = ElevatedButton(
+      child: Text("OK"),
+      onPressed: () {
+        Navigator.pop(context);
+        Navigator.pop(context);
+      },
+    );
+
+    //设置对话框
+    AlertDialog alert = AlertDialog(
+      content: Text("评论成功"),
+      actions: [
+        okButton,
+      ],
+    );
+
+    //显示对话框
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   void getDeviceInfo() async {
@@ -74,11 +104,11 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
                 height: 15,
               ),
               RatingBar(
-                initialRating: 0, //初始评分 double
+                initialRating: socre, //初始评分 double
                 itemCount: 5, //评分组件个数
                 direction: Axis.horizontal,
                 onRatingUpdate: (rating) {
-                  setState(() {});
+                  socre = rating;
                 },
                 itemSize: 24,
                 ratingWidget: RatingWidget(
@@ -108,6 +138,7 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
                   maxLines: null,
                   maxLength: 400,
                   keyboardType: TextInputType.multiline,
+                  controller: _textController,
                   decoration: InputDecoration(
                     hintText: "写下你的想法...",
                     border: InputBorder.none,
@@ -142,16 +173,40 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),
                     onPressed: () {
-                      //1.展示加载框
+                      // 1.展示加载框
                       showDialog(
                           context: context,
                           builder: (context) {
                             return new LoadingDialog();
                           });
-                      Timer.periodic(Duration(seconds: 1), (timer) {
-                        timer.cancel();
+                      CommentService.writeComment(_textController.text,
+                              socre.toInt(), widget.gameId)
+                          .then((value) {
                         Navigator.pop(context);
-                        Navigator.pop(context);
+                        if (value) {
+                          showAlertDialog(context);
+                        } else {
+                          showDialog(
+                              // 设置点击 dialog 外部不取消 dialog，默认能够取消
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                    content: Text('评论失败请重试！'),
+
+                                    elevation: 8.0, // 投影的阴影高度
+                                    semanticLabel:
+                                        'Label', // 这个用于无障碍下弹出 dialog 的提示
+                                    shape: Border.all(),
+                                    // dialog 的操作按钮，actions 的个数尽量控制不要过多，否则会溢出 `Overflow`
+                                    actions: <Widget>[
+                                      // 点击关闭 dialog，需要通过 Navigator 进行操作
+                                      ElevatedButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                          child: Text('确定')),
+                                    ],
+                                  ));
+                        }
                       });
                     },
                     elevation: 2.0,
@@ -185,10 +240,15 @@ class CommentTopWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(
-          Icons.close,
-          color: Colors.black,
-          size: 30,
+        InkWell(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Icon(
+            Icons.close,
+            color: Colors.black,
+            size: 30,
+          ),
         ),
         SizedBox(
           width: 20,

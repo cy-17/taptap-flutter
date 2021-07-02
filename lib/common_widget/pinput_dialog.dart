@@ -5,6 +5,7 @@ import 'package:TapTap/entity/user_info.dart';
 import 'package:TapTap/pages/index/Login/register_page.dart';
 import 'package:TapTap/service/user_service.dart';
 import 'package:TapTap/util/GlobalData.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:pinput/pin_put/pin_put.dart';
@@ -114,14 +115,17 @@ class _PinPutDialogState extends State<PinPutDialog> {
                             .then((value) {
                           this.setState(() {});
                           if (value.code == 1) {
-                            _timer.cancel();
                             GlobalData.userInfo = UserInfo(
                                 value.map["user"]['userNickName'],
                                 value.map["user"]['userPhoneNumber'],
                                 value.map["user"]['userCoverUrl']);
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                            Navigator.pop(context);
+                            UserService.login(widget.phone).then((value) {
+                              _timer.cancel();
+                              GlobalData.userInfo!.userId = value;
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            });
                           } else if (value.code == 204) {
                             _timer.cancel();
                             Navigator.pop(context);

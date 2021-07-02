@@ -1,6 +1,10 @@
 import 'package:TapTap/common_widget/loading_diglog.dart';
 import 'package:TapTap/config/app_colors.dart';
 import 'package:TapTap/entity/game_entity.dart';
+import 'package:TapTap/pages/index/home/game_description/game_detail.dart';
+import 'package:TapTap/service/download_service.dart';
+import 'package:TapTap/service/rank_service.dart';
+import 'package:TapTap/util/DigitUtil.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 
@@ -11,64 +15,25 @@ class RankPage extends StatefulWidget {
   _RankPageState createState() => _RankPageState();
 }
 
-class _RankPageState extends State<RankPage> {
+class _RankPageState extends State<RankPage>
+    with AutomaticKeepAliveClientMixin {
   final List<Game> _gameList = [];
   late ScrollController _scrollController;
+  int page = 1;
   @override
   void initState() {
     super.initState();
     _scrollController = new ScrollController();
-    _gameList.add(Game(
-        "地铁跑酷",
-        "http://pao.uu.cc/manage/upload/image/pao.uu.cc/2021-06-11/20210611_183230_110015.png",
-        "休闲",
-        9.3,
-        "哥本哈根，一座极具童话气息的城市！ 本次地图降落在丹麦哥本哈根，跟随《地铁跑酷》一起来一场童话王国的邂逅！"));
-    _gameList.add(Game(
-        "三国志幻想大陆",
-        "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fmedia.9game.cn%2Fgamebase%2F2021%2F4%2F28%2F227016116_.jpg&refer=http%3A%2F%2Fmedia.9game.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1626449203&t=f10ee98c3ce0767cf3576358170604d7",
-        "触手可及的美好三国！高颜值卡牌王者来袭，等你来玩！",
-        7.1,
-        "哥本哈根，一座极具童话气息的城市！ 本次地图降落在丹麦哥本哈根，跟随《地铁跑酷》一起来一场童话王国的邂逅！"));
-    _gameList.add(Game(
-        "三国志幻想大陆",
-        "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fmedia.9game.cn%2Fgamebase%2F2021%2F4%2F28%2F227016116_.jpg&refer=http%3A%2F%2Fmedia.9game.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1626449203&t=f10ee98c3ce0767cf3576358170604d7",
-        "触手可及的美好三国！高颜值卡牌王者来袭，等你来玩！",
-        7.1,
-        "哥本哈根，一座极具童话气息的城市！ 本次地图降落在丹麦哥本哈根，跟随《地铁跑酷》一起来一场童话王国的邂逅！"));
-    _gameList.add(Game(
-        "三国志幻想大陆",
-        "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fmedia.9game.cn%2Fgamebase%2F2021%2F4%2F28%2F227016116_.jpg&refer=http%3A%2F%2Fmedia.9game.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1626449203&t=f10ee98c3ce0767cf3576358170604d7",
-        "触手可及的美好三国！高颜值卡牌王者来袭，等你来玩！",
-        7.1,
-        "哥本哈根，一座极具童话气息的城市！ 本次地图降落在丹麦哥本哈根，跟随《地铁跑酷》一起来一场童话王国的邂逅！"));
-    _gameList.add(Game(
-        "三国志幻想大陆",
-        "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fmedia.9game.cn%2Fgamebase%2F2021%2F4%2F28%2F227016116_.jpg&refer=http%3A%2F%2Fmedia.9game.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1626449203&t=f10ee98c3ce0767cf3576358170604d7",
-        "触手可及的美好三国！高颜值卡牌王者来袭，等你来玩！",
-        7.1,
-        "哥本哈根，一座极具童话气息的城市！ 本次地图降落在丹麦哥本哈根，跟随《地铁跑酷》一起来一场童话王国的邂逅！"));
+
+    _getRankData();
   }
 
   _getRankData() {
-    _gameList.add(Game(
-        "三国志幻想大陆",
-        "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fmedia.9game.cn%2Fgamebase%2F2021%2F4%2F28%2F227016116_.jpg&refer=http%3A%2F%2Fmedia.9game.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1626449203&t=f10ee98c3ce0767cf3576358170604d7",
-        "触手可及的美好三国！高颜值卡牌王者来袭，等你来玩！",
-        7.1,
-        "哥本哈根，一座极具童话气息的城市！ 本次地图降落在丹麦哥本哈根，跟随《地铁跑酷》一起来一场童话王国的邂逅！"));
-    _gameList.add(Game(
-        "三国志幻想大陆",
-        "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fmedia.9game.cn%2Fgamebase%2F2021%2F4%2F28%2F227016116_.jpg&refer=http%3A%2F%2Fmedia.9game.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1626449203&t=f10ee98c3ce0767cf3576358170604d7",
-        "触手可及的美好三国！高颜值卡牌王者来袭，等你来玩！",
-        7.1,
-        "哥本哈根，一座极具童话气息的城市！ 本次地图降落在丹麦哥本哈根，跟随《地铁跑酷》一起来一场童话王国的邂逅！"));
-    _gameList.add(Game(
-        "三国志幻想大陆",
-        "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fmedia.9game.cn%2Fgamebase%2F2021%2F4%2F28%2F227016116_.jpg&refer=http%3A%2F%2Fmedia.9game.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1626449203&t=f10ee98c3ce0767cf3576358170604d7",
-        "触手可及的美好三国！高颜值卡牌王者来袭，等你来玩！",
-        7.1,
-        "哥本哈根，一座极具童话气息的城市！ 本次地图降落在丹麦哥本哈根，跟随《地铁跑酷》一起来一场童话王国的邂逅！"));
+    RankService.getRank(page).then((value) => {
+          this.setState(() {
+            _gameList.addAll(value);
+          })
+        });
   }
 
   @override
@@ -84,11 +49,17 @@ class _RankPageState extends State<RankPage> {
           );
         }, childCount: _gameList.length)),
       ],
-      onRefresh: () async {},
+      onRefresh: () async {
+        this.setState(() {
+          page = 0;
+          _getRankData();
+        });
+      },
       onLoad: () async {
         await Future.delayed(Duration(seconds: 2), () {
           if (mounted) {
             setState(() {
+              page++;
               _getRankData();
             });
           }
@@ -96,26 +67,48 @@ class _RankPageState extends State<RankPage> {
       },
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
-class _ListGameCard extends StatelessWidget {
+class _ListGameCard extends StatefulWidget {
   final Game game;
   final int index;
   const _ListGameCard({Key? key, required this.game, required this.index})
       : super(key: key);
 
   @override
+  __ListGameCardState createState() => __ListGameCardState();
+}
+
+class __ListGameCardState extends State<_ListGameCard> {
+  String _content = "下载";
+
+  @override
+  void initState() {
+    super.initState();
+    DownloadService.apkExist(widget.game.gameName!).then((value) {
+      this.setState(() {
+        if (value) _content = "打开";
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
       width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Expanded(
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Text(
-              index.toString(),
+              (widget.index + 1).toString(),
+              textAlign: TextAlign.end,
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 20,
@@ -125,73 +118,112 @@ class _ListGameCard extends StatelessWidget {
           SizedBox(
             width: 2,
           ),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.network(
-              game.gamePictureUrl,
-              width: 68,
-              height: 68,
-              fit: BoxFit.cover,
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          GameDetail(gameId: widget.game.gameId)));
+            },
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.network(
+                widget.game.gamePictureUrl!,
+                width: 68,
+                height: 68,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           SizedBox(
             width: 8,
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                game.gameName,
-                maxLines: 2,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+          Expanded(
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            GameDetail(gameId: widget.game.gameId)));
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(
-                    Icons.star,
-                    color: AppColors.navActive,
-                    size: 15,
-                  ),
-                  SizedBox(
-                    width: 3,
-                  ),
-                  Text(
-                    game.score.toString(),
-                    style: TextStyle(
-                        color: AppColors.navActive,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700),
-                  ),
-                  SizedBox(
-                    width: 3,
-                  ),
                   Container(
                     width: 150,
                     child: Text(
-                      game.category.toString(),
+                      widget.game.gameName!,
+                      maxLines: 2,
                       overflow: TextOverflow.fade,
-                      maxLines: 1,
                       style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700),
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600),
                     ),
                   ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.star,
+                        color: AppColors.navActive,
+                        size: 15,
+                      ),
+                      SizedBox(
+                        width: 3,
+                      ),
+                      Text(
+                        widget.game.score.toString(),
+                        style: TextStyle(
+                            color: AppColors.navActive,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700),
+                      ),
+                      SizedBox(
+                        width: 3,
+                      ),
+                      Container(
+                        width: 140,
+                        child: Text(
+                          widget.game.category
+                              .toString()
+                              .replaceAll("[", "")
+                              .replaceAll("]", "")
+                              .replaceAll(",", " "),
+                          overflow: TextOverflow.clip,
+                          maxLines: 1,
+                          style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                    ],
+                  )
                 ],
-              )
-            ],
+              ),
+            ),
           ),
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              DownloadService.installApk("", widget.game.gameName!,
+                  (current, total) {
+                double progress = current / total;
+                this.setState(() {
+                  if (current == total) {
+                    _content = "打开";
+                  } else
+                    _content = "${DigitUtil.formatNum(progress, 1)}%";
+                });
+              });
+            },
             child: Text(
-              "下载",
+              _content,
               style: TextStyle(color: AppColors.navActive, fontSize: 15),
             ),
             style: ButtonStyle(
@@ -207,7 +239,7 @@ class _ListGameCard extends StatelessWidget {
                 //设置边框
                 side: MaterialStateProperty.all(
                     BorderSide(color: Colors.white, width: 1))),
-          )
+          ),
         ],
       ),
     );

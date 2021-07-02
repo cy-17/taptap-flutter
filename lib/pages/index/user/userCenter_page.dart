@@ -1,5 +1,11 @@
 import 'package:TapTap/config/app_colors.dart';
+import 'package:TapTap/entity/comment_entity.dart';
+import 'package:TapTap/entity/user_info.dart';
+import 'package:TapTap/pages/index/home/game_description/game_detail.dart';
+import 'package:TapTap/pages/index/user/change_info.dart';
+import 'package:TapTap/service/comment_service.dart';
 import 'package:TapTap/util/DrawUtil.dart';
+import 'package:TapTap/util/GlobalData.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -11,7 +17,7 @@ class UserCenterPage extends StatefulWidget {
 }
 
 class _UserCenterPageState extends State<UserCenterPage>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   late final TabController _tabController;
   final List<Tab> tabs = [
     Tab(
@@ -66,7 +72,7 @@ class _UserCenterPageState extends State<UserCenterPage>
                                             border: Border.all(
                                                 width: 5, color: Colors.white)),
                                         child: Image.network(
-                                          "https://img0.baidu.com/it/u=2456468987,3284231714&fm=26&fmt=auto&gp=0.jpg",
+                                          GlobalData.userInfo!.userCoverUrl!,
                                           fit: BoxFit.cover,
                                           width: 60,
                                         ),
@@ -125,7 +131,13 @@ class _UserCenterPageState extends State<UserCenterPage>
                                                     BorderSide(
                                                         color: Colors.white,
                                                         width: 1))),
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          UserInfoPage()));
+                                            },
                                             child: Text(
                                               "修改资料",
                                               style: TextStyle(
@@ -140,7 +152,10 @@ class _UserCenterPageState extends State<UserCenterPage>
                                 SizedBox(
                                   height: 5,
                                 ),
-                                Text("帅不帅",
+                                Text(
+                                    GlobalData.userInfo == null
+                                        ? "帅不帅"
+                                        : GlobalData.userInfo!.userNickName!,
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 18,
@@ -169,7 +184,8 @@ class _UserCenterPageState extends State<UserCenterPage>
                                     SizedBox(
                                       width: 5,
                                     ),
-                                    Text("ID: 367842561",
+                                    Text(
+                                        "ID: ${GlobalData.userInfo!.userId ?? 1321312}",
                                         style: TextStyle(
                                           color: Colors.white.withOpacity(0.8),
                                           fontSize: 12,
@@ -271,7 +287,7 @@ class _UserCenterPageState extends State<UserCenterPage>
                 height: 13,
               ),
               Container(
-                height: height - 80,
+                height: height - 200,
                 child: TabBarView(
                   children: [_HomePage(), _FABU(), _About()],
                   controller: _tabController,
@@ -311,6 +327,10 @@ class _UserCenterPageState extends State<UserCenterPage>
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
 
 class _About extends StatelessWidget {
@@ -341,21 +361,44 @@ class _FABU extends StatelessWidget {
   }
 }
 
-class _HomePage extends StatelessWidget {
-  const _HomePage({
-    Key? key,
-  }) : super(key: key);
+class _HomePage extends StatefulWidget {
+  const _HomePage({Key? key}) : super(key: key);
+
+  @override
+  __HomePageState createState() => __HomePageState();
+}
+
+class __HomePageState extends State<_HomePage> {
+  late List<Widget> commentList = [];
+  int page = 1;
+  @override
+  void initState() {
+    super.initState();
+    CommentService.getCommentByUserId(GlobalData.userInfo!.userId!, page)
+        .then((value) => this.setState(() {
+              value.forEach((element) {
+                commentList.add(_CommentCard(comment: element));
+              });
+            }));
+  }
 
   @override
   Widget build(BuildContext context) {
     return ListView(
-      children: [_CommentCard()],
+      children: [
+        Column(children: commentList.length > 0 ? commentList : []),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(child: Text("暂无更多")),
+        )
+      ],
     );
   }
 }
 
 class _CommentCard extends StatefulWidget {
-  const _CommentCard({Key? key}) : super(key: key);
+  final Comment comment;
+  const _CommentCard({Key? key, required this.comment}) : super(key: key);
 
   @override
   __CommentCardState createState() => __CommentCardState();
@@ -382,7 +425,7 @@ class __CommentCardState extends State<_CommentCard> {
                       padding: const EdgeInsets.only(top: 12, left: 5),
                       child: ClipOval(
                         child: Image.network(
-                          "https://img1.baidu.com/it/u=2697754602,2032230362&fm=26&fmt=auto&gp=0.jpg",
+                          GlobalData.userInfo!.userCoverUrl!,
                           fit: BoxFit.cover,
                           width: 50,
                         ),
@@ -395,13 +438,16 @@ class __CommentCardState extends State<_CommentCard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "菲菲-颜子-小丽",
+                          GlobalData.userInfo!.userNickName!,
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: 15,
                               fontWeight: FontWeight.w800),
                         ),
-                        Text("2天前",
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text("${widget.comment.commentTime ?? '2天前'}",
                             style: TextStyle(
                               color: Colors.grey,
                               fontSize: 12,
@@ -411,43 +457,55 @@ class __CommentCardState extends State<_CommentCard> {
                   ],
                 ),
               ),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 14),
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(10)),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 50,
-                      height: 50,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.network(
-                          "https://img2.baidu.com/it/u=3179073811,4006045172&fm=26&fmt=auto&gp=0.jpg",
-                          fit: BoxFit.cover,
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              GameDetail(gameId: widget.comment.gameId)));
+                },
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 14),
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      color: Colors.grey.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 50,
+                        height: 50,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.network(
+                            "${widget.comment.commentGameCoverUrl}",
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "无极仙途",
-                          style: TextStyle(color: Colors.black, fontSize: 12),
-                        ),
-                        Text(
-                          "1.9+评价  帖子1.8万+",
-                          style: TextStyle(color: Colors.grey, fontSize: 12),
-                        )
-                      ],
-                    )
-                  ],
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "${widget.comment.commentGameName}",
+                            style: TextStyle(color: Colors.black, fontSize: 12),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            "1.9+评价  帖子1.8万+",
+                            style: TextStyle(color: Colors.grey, fontSize: 12),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
               SizedBox(
@@ -468,14 +526,16 @@ class __CommentCardState extends State<_CommentCard> {
                     SizedBox(
                       width: 6,
                     ),
-                    Row(children: DrawUtil.getStarOnly(5)),
+                    Row(
+                        children:
+                            DrawUtil.getStarOnly(widget.comment.commentScore!)),
                   ],
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 12.0, bottom: 1, top: 5),
                 child: Text(
-                  "   感谢育碧的邀请，让我们得以提前试玩了《彩虹六号：异种》。作为脱胎于前作“围攻”内特殊模式的系列新作，本次的”异种“在保留以往优秀射击手感和诸多特色元素的同时，将主题从反恐对抗变成了合作共斗。尽管区区一个下午的试玩并没能让我窥得本作全貌，却依然获得了一些值得和大家分享的信息。以下，就是我本次的试玩体验。Ps：本次试玩为Demo版本，并不代表游戏上市后最终素质",
+                  widget.comment.commentDetail ?? "unknown",
                   maxLines: 7,
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.ellipsis,
@@ -517,13 +577,10 @@ class __CommentCardState extends State<_CommentCard> {
               SizedBox(
                 height: 12,
               ),
+              Divider()
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text("暂无更多"),
-        )
       ],
     );
   }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'config/app_theme.dart';
 
+// flutter run --no-sound-null-safety
 void main() {
   runApp(MyApp());
 }
@@ -31,7 +32,7 @@ class _TransitPage extends StatefulWidget {
 }
 
 class _State extends State<_TransitPage> {
-  int _currentTime = 1;
+  int _currentTime = 3;
   late Timer _timer;
 
   @override
@@ -85,8 +86,8 @@ class _State extends State<_TransitPage> {
       opacity: 0.5,
       child: ClipOval(
         child: Container(
-          width: 70,
-          height: 70,
+          width: 60,
+          height: 60,
           color: Colors.black.withOpacity(0.8),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

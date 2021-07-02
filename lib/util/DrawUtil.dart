@@ -45,4 +45,30 @@ class DrawUtil {
 
     return list;
   }
+
+  static showAlertDialog(BuildContext context, String content) {
+    //设置按钮
+    Widget okButton = ElevatedButton(
+      child: Text("OK"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    //设置对话框
+    AlertDialog alert = AlertDialog(
+      content: Text(content),
+      actions: [
+        okButton,
+      ],
+    );
+
+    //显示对话框
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 }

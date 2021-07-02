@@ -1,8 +1,7 @@
-import 'dart:ffi';
-
 import 'package:TapTap/config/app_colors.dart';
 import 'package:TapTap/entity/game_entity.dart';
 import 'package:TapTap/pages/index/home/game_description/game_detail.dart';
+import 'package:TapTap/service/game_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 
@@ -13,58 +12,24 @@ class RecommendPage extends StatefulWidget {
   _RecommendPageState createState() => _RecommendPageState();
 }
 
-class _RecommendPageState extends State<RecommendPage> {
+class _RecommendPageState extends State<RecommendPage>
+    with AutomaticKeepAliveClientMixin {
   final List<Game> _gameList = [];
+  int page = 1;
   late ScrollController _scrollController;
   @override
   void initState() {
     super.initState();
     _scrollController = new ScrollController();
-    _gameList.add(Game(
-        "地铁跑酷",
-        "http://pao.uu.cc/manage/upload/image/pao.uu.cc/2021-06-11/20210611_183230_110015.png",
-        "休闲",
-        9.3,
-        "哥本哈根，一座极具童话气息的城市！ 本次地图降落在丹麦哥本哈根，跟随《地铁跑酷》一起来一场童话王国的邂逅！"));
-    _gameList.add(Game(
-        "三国志幻想大陆",
-        "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fmedia.9game.cn%2Fgamebase%2F2021%2F4%2F28%2F227016116_.jpg&refer=http%3A%2F%2Fmedia.9game.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1626449203&t=f10ee98c3ce0767cf3576358170604d7",
-        "触手可及的美好三国！高颜值卡牌王者来袭，等你来玩！",
-        7.1,
-        "哥本哈根，一座极具童话气息的城市！ 本次地图降落在丹麦哥本哈根，跟随《地铁跑酷》一起来一场童话王国的邂逅！"));
+    _getRecommendData();
   }
 
   _getRecommendData() {
-    _gameList.add(Game(
-        "三国志幻想大陆",
-        "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fmedia.9game.cn%2Fgamebase%2F2021%2F4%2F28%2F227016116_.jpg&refer=http%3A%2F%2Fmedia.9game.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1626449203&t=f10ee98c3ce0767cf3576358170604d7",
-        "触手可及的美好三国！高颜值卡牌王者来袭，等你来玩！",
-        7.1,
-        "哥本哈根，一座极具童话气息的城市！ 本次地图降落在丹麦哥本哈根，跟随《地铁跑酷》一起来一场童话王国的邂逅！"));
-    _gameList.add(Game(
-        "三国志幻想大陆",
-        "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fmedia.9game.cn%2Fgamebase%2F2021%2F4%2F28%2F227016116_.jpg&refer=http%3A%2F%2Fmedia.9game.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1626449203&t=f10ee98c3ce0767cf3576358170604d7",
-        "触手可及的美好三国！高颜值卡牌王者来袭，等你来玩！",
-        7.1,
-        "哥本哈根，一座极具童话气息的城市！ 本次地图降落在丹麦哥本哈根，跟随《地铁跑酷》一起来一场童话王国的邂逅！"));
-    _gameList.add(Game(
-        "三国志幻想大陆",
-        "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fmedia.9game.cn%2Fgamebase%2F2021%2F4%2F28%2F227016116_.jpg&refer=http%3A%2F%2Fmedia.9game.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1626449203&t=f10ee98c3ce0767cf3576358170604d7",
-        "触手可及的美好三国！高颜值卡牌王者来袭，等你来玩！",
-        7.1,
-        "哥本哈根，一座极具童话气息的城市！ 本次地图降落在丹麦哥本哈根，跟随《地铁跑酷》一起来一场童话王国的邂逅！"));
-    _gameList.add(Game(
-        "三国志幻想大陆",
-        "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fmedia.9game.cn%2Fgamebase%2F2021%2F4%2F28%2F227016116_.jpg&refer=http%3A%2F%2Fmedia.9game.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1626449203&t=f10ee98c3ce0767cf3576358170604d7",
-        "触手可及的美好三国！高颜值卡牌王者来袭，等你来玩！",
-        7.1,
-        "哥本哈根，一座极具童话气息的城市！ 本次地图降落在丹麦哥本哈根，跟随《地铁跑酷》一起来一场童话王国的邂逅！"));
-    _gameList.add(Game(
-        "三国志幻想大陆",
-        "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fmedia.9game.cn%2Fgamebase%2F2021%2F4%2F28%2F227016116_.jpg&refer=http%3A%2F%2Fmedia.9game.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1626449203&t=f10ee98c3ce0767cf3576358170604d7",
-        "触手可及的美好三国！高颜值卡牌王者来袭，等你来玩！",
-        7.1,
-        "哥本哈根，一座极具童话气息的城市！ 本次地图降落在丹麦哥本哈根，跟随《地铁跑酷》一起来一场童话王国的邂逅！"));
+    GameService.getRecommend(page).then((value) {
+      this.setState(() {
+        _gameList.addAll(value);
+      });
+    });
   }
 
   @override
@@ -79,11 +44,17 @@ class _RecommendPageState extends State<RecommendPage> {
           );
         }, childCount: _gameList.length)),
       ],
-      onRefresh: () async {},
+      onRefresh: () async {
+        this.setState(() {
+          page = 0;
+          _getRecommendData();
+        });
+      },
       onLoad: () async {
         await Future.delayed(Duration(seconds: 2), () {
           if (mounted) {
             setState(() {
+              page++;
               _getRecommendData();
             });
           }
@@ -91,6 +62,9 @@ class _RecommendPageState extends State<RecommendPage> {
       },
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class GameCard extends StatelessWidget {
@@ -102,7 +76,9 @@ class GameCard extends StatelessWidget {
     return InkWell(
       onTap: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => GameDetail()));
+            context,
+            MaterialPageRoute(
+                builder: (context) => GameDetail(gameId: game.gameId)));
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -112,7 +88,7 @@ class GameCard extends StatelessWidget {
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10), topRight: Radius.circular(10)),
             child: Image.network(
-              game.gamePictureUrl,
+              game.gamePictureUrl!,
               width: double.infinity,
               height: 160,
               fit: BoxFit.cover,
@@ -151,12 +127,17 @@ class _GameDescription extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                game.gameName,
-                style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.black),
+              Container(
+                width: 160,
+                child: Text(
+                  game.gameName!,
+                  maxLines: 1,
+                  overflow: TextOverflow.visible,
+                  style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black),
+                ),
               ),
               SizedBox(
                 height: 1,
@@ -164,7 +145,7 @@ class _GameDescription extends StatelessWidget {
               Container(
                 constraints: BoxConstraints(maxWidth: 260),
                 child: Text(
-                  game.category,
+                  game.description!,
                   style: TextStyle(fontSize: 15),
                   textAlign: TextAlign.left,
                   maxLines: 2,

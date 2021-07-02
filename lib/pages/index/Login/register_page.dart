@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:TapTap/common_widget/loading_diglog.dart';
 import 'package:TapTap/config/app_colors.dart';
 import 'package:TapTap/entity/user_info.dart';
-import 'package:TapTap/pages/index/index_page.dart';
 import 'package:TapTap/service/user_service.dart';
 import 'package:TapTap/util/GlobalData.dart';
 import 'package:flutter/material.dart';
@@ -155,11 +154,15 @@ class _RegisterPageState extends State<RegisterPage> {
                           "https://img2.baidu.com/it/u=1995235764,179833910&fm=26&fmt=auto&gp=0.jpg");
                       UserService.register(userInfo).then((value) {
                         if (value.code == 1) {
-                          GlobalData.userInfo = userInfo;
+                          this.setState(() {
+                            Timer.periodic(Duration(seconds: 2), (timer) {
+                              timer.cancel();
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            });
+                          });
                         }
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                        Navigator.pop(context);
                       });
                     } else {
                       UserService.uploadFile(_image.path).then((value) {
@@ -169,10 +172,6 @@ class _RegisterPageState extends State<RegisterPage> {
                           UserInfo userInfo = UserInfo(_textController.text,
                               widget.phone, value.map['url']);
                           UserService.register(userInfo).then((value) {
-                            if (value.code == 1) {
-                              GlobalData.userInfo = userInfo;
-                              print(GlobalData.userInfo.toString());
-                            }
                             Navigator.pop(context);
                             Navigator.pop(context);
                             Navigator.pop(context);
@@ -180,13 +179,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         }
                       });
                     }
-
-                    // Timer.periodic(Duration(seconds: 1), (timer) {
-
-                    //   Navigator.of(context).pushAndRemoveUntil(
-                    //       MaterialPageRoute(builder: (context) => IndexPage()),
-                    //       (route) => false);
-                    // });
                   },
                   elevation: 2.0,
                   fillColor: _textController.text.length == 0

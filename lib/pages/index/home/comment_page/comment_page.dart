@@ -1,139 +1,259 @@
+import 'dart:async';
+
 import 'package:TapTap/common_widget/comment_card.dart';
+import 'package:TapTap/common_widget/loading_diglog.dart';
 import 'package:TapTap/common_widget/score_description.dart';
 import 'package:TapTap/config/app_colors.dart';
 import 'package:TapTap/pages/index/home/comment_page/write_comment_page.dart';
+import 'package:TapTap/service/comment_service.dart';
+import 'package:TapTap/util/DrawUtil.dart';
+import 'package:TapTap/util/GlobalData.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 class CommentPage extends StatefulWidget {
-  const CommentPage({Key? key}) : super(key: key);
+  final int scroe;
+  final Map<String, dynamic> countScore;
+  final int gameId;
+  const CommentPage(
+      {Key? key,
+      required this.scroe,
+      required this.countScore,
+      required this.gameId})
+      : super(key: key);
 
   @override
   _CommentPageState createState() => _CommentPageState();
 }
 
-class _CommentPageState extends State<CommentPage> {
+class _CommentPageState extends State<CommentPage>
+    with AutomaticKeepAliveClientMixin {
+  List<Widget> gameFirstComment = [];
+  List<Widget> userCommentList = [];
+  late EasyRefreshController _controller;
+  int page = 1;
+  @override
+  void initState() {
+    super.initState();
+    _getUserComment();
+    _controller = EasyRefreshController();
+    _getComment();
+  }
+
+  _getUserComment() {
+    print("object");
+    if (GlobalData.userInfo != null) {
+      CommentService.getCommentByUserIdAndGameId(
+              GlobalData.userInfo!.userId!, widget.gameId, page)
+          .then((value) => this.setState(() {
+                value.forEach((element) {
+                  userCommentList.add(Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: CommentCard(
+                      comment: element,
+                      callback: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return new LoadingDialog();
+                            });
+
+                        CommentService.deleteComment(
+                            GlobalData.userInfo!.userId!,
+                            element.gameId!,
+                            element.commentId!);
+                        Timer.periodic(Duration(seconds: 1), (timer) {
+                          timer.cancel();
+                          Navigator.pop(context);
+                          DrawUtil.showAlertDialog(context, "删除成功");
+                        });
+                      },
+                    ),
+                  ));
+                });
+              }));
+    }
+  }
+
+  _getComment() async {
+    CommentService.getOneComment(widget.gameId, page).then((value) {
+      value.forEach((element) {
+        if (GlobalData.userInfo != null) {
+          if (element.commentUserId != GlobalData.userInfo!.userId)
+            this.setState(() {
+              gameFirstComment.add(Padding(
+                padding: const EdgeInsets.all(10),
+                child: CommentCard(comment: element),
+              ));
+            });
+        } else
+          this.setState(() {
+            gameFirstComment.add(Padding(
+              padding: const EdgeInsets.all(10),
+              child: CommentCard(comment: element),
+            ));
+          });
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => WriteCommentPage()));
-        },
-        backgroundColor: AppColors.navActive,
-        child: Icon(Icons.border_color),
-      ),
-      body: ListView(
-        children: [
-          SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: [
-              InkWell(
-                onTap: () {
-                  Navigator.pop(context);
+        floatingActionButton: GlobalData.userInfo == null
+            ? Container()
+            : FloatingActionButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              WriteCommentPage(gameId: widget.gameId)));
                 },
-                child: Icon(
-                  Icons.keyboard_arrow_left,
-                  color: Colors.grey,
-                  size: 35,
+                backgroundColor: AppColors.navActive,
+                child: Icon(Icons.border_color),
+              ),
+        body: Stack(
+          children: [
+            EasyRefresh(
+              controller: _controller,
+              child: ListView(
+                children: [
+                  SizedBox(
+                    height: 70,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ScoreDescription(
+                      score: widget.scroe,
+                      countScore: widget.countScore,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  ScoreDescriptionBelow(
+                    score: widget.scroe,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  GlobalData.userInfo == null
+                      ? Container()
+                      : Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    "我的评价",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 23,
+                                        fontWeight: FontWeight.w900),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: userCommentList,
+                              )
+                            ],
+                          ),
+                        ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  // CommentCard(),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
+                      children: [
+                        Text(
+                          "游戏评价",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 23,
+                              fontWeight: FontWeight.w900),
+                        ),
+                        Spacer(),
+                        Text(
+                          "默认",
+                          style: TextStyle(fontSize: 13, color: Colors.black),
+                        ),
+                        Icon(
+                          Icons.arrow_drop_down,
+                          size: 20,
+                        )
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
+                      children: _widgets(this),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Column(
+                    children: gameFirstComment,
+                  )
+                ],
+              ),
+              onRefresh: () async {
+                this.setState(() {
+                  page = 1;
+                  gameFirstComment.clear();
+                  userCommentList.clear();
+                  _getUserComment();
+                  _getComment();
+                });
+              },
+              onLoad: () async {
+                await Future.delayed(Duration(seconds: 2), () {
+                  if (mounted) {
+                    setState(() {
+                      page++;
+                      _getComment();
+                    });
+                  }
+                });
+              },
+            ),
+            Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 30.0),
+                child: Row(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Icon(
+                        Icons.keyboard_arrow_left,
+                        color: Colors.grey,
+                        size: 35,
+                      ),
+                    ),
+                    Text(
+                      "评分 & 评价",
+                      style: TextStyle(color: Colors.black, fontSize: 17),
+                    ),
+                  ],
                 ),
               ),
-              Text(
-                "评分 & 评价",
-                style: TextStyle(color: Colors.black, fontSize: 17),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ScoreDescription(),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          ScoreDescriptionBelow(),
-          SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Row(
-              children: [
-                Text(
-                  "我的评价",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 23,
-                      fontWeight: FontWeight.w900),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          CommentCard(),
-          SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Row(
-              children: [
-                Text(
-                  "游戏评价",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 23,
-                      fontWeight: FontWeight.w900),
-                ),
-                Spacer(),
-                Text(
-                  "默认",
-                  style: TextStyle(fontSize: 13, color: Colors.black),
-                ),
-                Icon(
-                  Icons.arrow_drop_down,
-                  size: 20,
-                )
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Wrap(
-              spacing: 10,
-              runSpacing: 10,
-              children: _widgets(this),
-            ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: CommentCard(),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: CommentCard(),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: CommentCard(),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: CommentCard(),
-          )
-        ],
-      ),
-    );
+            )
+          ],
+        ));
   }
 
   List<String> tags = ["全部", "同设备", "有游戏时长", "好评", "好评", "好评", "好评"];
@@ -168,4 +288,7 @@ class _CommentPageState extends State<CommentPage> {
   List<Widget> _widgets(State state) {
     return tags.asMap().keys.map((index) => _colorLvItem(index)).toList();
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

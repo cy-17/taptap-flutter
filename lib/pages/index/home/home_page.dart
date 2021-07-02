@@ -1,5 +1,6 @@
 import 'package:TapTap/config/app_colors.dart';
 import 'package:TapTap/pages/index/Login/login_page.dart';
+import 'package:TapTap/pages/index/user/change_info.dart';
 import 'package:TapTap/pages/index/user/userCenter_page.dart';
 import 'package:TapTap/util/CONSTUtil.dart';
 import 'package:TapTap/util/GlobalData.dart';
@@ -90,7 +91,7 @@ class __DrawerListViewState extends State<_DrawerListView> {
                     context,
                     MaterialPageRoute(
                         settings: RouteSettings(name: "homePage"),
-                        builder: (context) => UserCenterPage()));
+                        builder: (context) => UserInfoPage()));
               },
               child: Image.asset(
                 "assets/images/home/drawer/drawer_saoyisao.png",
@@ -102,21 +103,28 @@ class __DrawerListViewState extends State<_DrawerListView> {
           accountName: Text(
             GlobalData.userInfo == null
                 ? "点击头像登陆"
-                : GlobalData.userInfo!.userNickName,
+                : GlobalData.userInfo!.userNickName!,
             style: TextStyle(
                 color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900),
           ),
           accountEmail: Text(""),
           currentAccountPicture: InkWell(
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => LoginPage()));
+              if (GlobalData.userInfo == null)
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => LoginPage()));
+              else
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        settings: RouteSettings(name: "homePage"),
+                        builder: (context) => UserCenterPage()));
             },
             child: CircleAvatar(
               child: GlobalData.userInfo != null
                   ? ClipOval(
                       child: Image.network(
-                        GlobalData.userInfo!.userCoverUrl,
+                        GlobalData.userInfo!.userCoverUrl!,
                         fit: BoxFit.cover,
                       ),
                     )
@@ -507,7 +515,7 @@ class _PersonImage extends StatelessWidget {
           child: Image.network(
               GlobalData.userInfo == null
                   ? "https://cyw-file.oss-cn-beijing.aliyuncs.com/loginImage.png"
-                  : GlobalData.userInfo!.userCoverUrl,
+                  : GlobalData.userInfo!.userCoverUrl!,
               fit: BoxFit.cover),
         ),
       ),
