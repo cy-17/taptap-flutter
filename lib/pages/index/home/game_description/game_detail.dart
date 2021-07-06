@@ -73,6 +73,16 @@ class _GameDetailState extends State<GameDetail> {
             _game!.GameCommentScore!["3"] +
             _game!.GameCommentScore!["2"] +
             _game!.GameCommentScore!["1"];
+        _game!.realSocre = DigitUtil.formatNum(
+            ((5 * _game!.GameCommentScore!["5"] +
+                        4 * _game!.GameCommentScore!["4"] +
+                        3 * _game!.GameCommentScore!["3"] +
+                        2 * _game!.GameCommentScore!["2"] +
+                        _game!.GameCommentScore!["1"]) *
+                    2) /
+                total,
+            1);
+
         value.categorys!.forEach((element) {
           tags.add(element.toString());
         });
@@ -255,7 +265,7 @@ class _GameDetailState extends State<GameDetail> {
                         ),
                       ),
                       Text(
-                        _game == null ? "0.0" : "${_game!.score!}",
+                        _game == null ? "0.0" : "${_game!.realSocre}",
                         style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w900,
@@ -278,9 +288,9 @@ class _GameDetailState extends State<GameDetail> {
                         this.setState(() {
                           if (current == total) {
                             status = "打开";
+                            print("下载完成");
                           } else
-                            print(progress);
-                          status = "正在下载：${DigitUtil.formatNum(progress, 1)}%";
+                            status = "下载中:${DigitUtil.formatNum(progress, 1)}%";
                         });
                       });
                     } else if (status == "打开") {
@@ -289,12 +299,29 @@ class _GameDetailState extends State<GameDetail> {
                   },
                   elevation: 2.0,
                   fillColor: AppColors.navActive,
-                  child: Text(
-                    status,
-                    style: TextStyle(
-                        fontSize: (status == "打开" || status == "下载") ? 14 : 8,
+                  child: Row(
+                    children: [
+                      Icon(
+                        status == "安装"
+                            ? Icons.download
+                            : (status == "打开"
+                                ? Icons.open_in_new
+                                : Icons.downloading),
+                        size: 16,
                         color: Colors.white,
-                        fontWeight: FontWeight.w600),
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        status,
+                        style: TextStyle(
+                            fontSize:
+                                (status == "打开" || status == "安装") ? 14 : 10,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ],
                   ),
                   padding: EdgeInsets.symmetric(vertical: 12, horizontal: 138),
                 ),
@@ -326,7 +353,7 @@ class _GameDetailState extends State<GameDetail> {
                           MaterialPageRoute(
                               builder: (context) => CommentPage(
                                     gameId: _game!.gameId!,
-                                    scroe: _game!.score!,
+                                    scroe: _game!.realSocre,
                                     countScore: _game!.GameCommentScore!,
                                   )));
                     },
@@ -427,14 +454,14 @@ class _GameDetailState extends State<GameDetail> {
                 height: 20,
               ),
               ScoreDescription(
-                score: _game == null ? 0 : _game!.score!,
+                score: _game == null ? "0" : _game!.realSocre,
                 countScore: _game == null ? Map() : _game!.GameCommentScore!,
               ),
               SizedBox(
                 height: 15,
               ),
               ScoreDescriptionBelow(
-                score: _game != null ? _game!.score! : 0,
+                score: _game != null ? _game!.realSocre : "0",
               ),
               SizedBox(
                 height: 25,
@@ -471,7 +498,7 @@ class _GameDetailState extends State<GameDetail> {
                         MaterialPageRoute(
                             builder: (context) => CommentPage(
                                   gameId: _game!.gameId!,
-                                  scroe: _game!.score!,
+                                  scroe: _game!.realSocre,
                                   countScore: _game!.GameCommentScore!,
                                 )));
                   },

@@ -15,7 +15,7 @@ class LoginPageWithEmail extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPageWithEmail> {
-  bool _checkBox = true;
+  bool _checkBox = false;
   var _textController;
   String errMsg = "";
 
@@ -136,6 +136,7 @@ class _LoginPageState extends State<LoginPageWithEmail> {
                                 timer.cancel();
                                 Navigator.pop(context);
                               });
+                              return;
                             }
                             if (_textController.text == "") {
                               this.setState(() {

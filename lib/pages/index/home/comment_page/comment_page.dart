@@ -4,18 +4,21 @@ import 'package:TapTap/common_widget/comment_card.dart';
 import 'package:TapTap/common_widget/loading_diglog.dart';
 import 'package:TapTap/common_widget/score_description.dart';
 import 'package:TapTap/config/app_colors.dart';
+import 'package:TapTap/entity/game_entity.dart';
 import 'package:TapTap/pages/index/home/comment_page/write_comment_page.dart';
 import 'package:TapTap/service/comment_service.dart';
+import 'package:TapTap/service/game_service.dart';
+import 'package:TapTap/util/DigitUtil.dart';
 import 'package:TapTap/util/DrawUtil.dart';
 import 'package:TapTap/util/GlobalData.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 class CommentPage extends StatefulWidget {
-  final int scroe;
-  final Map<String, dynamic> countScore;
+  String scroe;
+  Map<String, dynamic> countScore;
   final int gameId;
-  const CommentPage(
+  CommentPage(
       {Key? key,
       required this.scroe,
       required this.countScore,
@@ -209,6 +212,25 @@ class _CommentPageState extends State<CommentPage>
                 ],
               ),
               onRefresh: () async {
+                GameService.getParticularGame(widget.gameId).then((value) {
+                  this.setState(() {
+                    widget.countScore = value.GameCommentScore!;
+                    int total = value.GameCommentScore!["5"] +
+                        value.GameCommentScore!["4"] +
+                        value.GameCommentScore!["3"] +
+                        value.GameCommentScore!["2"] +
+                        value.GameCommentScore!["1"];
+                    widget.scroe = DigitUtil.formatNum(
+                        ((5 * value.GameCommentScore!["5"] +
+                                    4 * value.GameCommentScore!["4"] +
+                                    3 * value.GameCommentScore!["3"] +
+                                    2 * value.GameCommentScore!["2"] +
+                                    value.GameCommentScore!["1"]) *
+                                2) /
+                            total,
+                        1);
+                  });
+                });
                 this.setState(() {
                   page = 1;
                   gameFirstComment.clear();

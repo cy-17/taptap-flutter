@@ -3,7 +3,7 @@ import 'package:TapTap/util/DrawUtil.dart';
 import 'package:flutter/material.dart';
 
 class ScoreDescription extends StatelessWidget {
-  final int score;
+  final String score;
   final Map<String, dynamic> countScore;
 
   const ScoreDescription({
@@ -37,7 +37,7 @@ class ScoreDescription extends StatelessWidget {
                     width: 5,
                   ),
                   Text(
-                    "$score",
+                    score,
                     style: TextStyle(
                         fontSize: 40,
                         fontWeight: FontWeight.w900,
@@ -78,7 +78,7 @@ class ScoreDescription extends StatelessWidget {
 }
 
 class ScoreDescriptionBelow extends StatelessWidget {
-  final int score;
+  final String score;
   const ScoreDescriptionBelow({
     Key? key,
     required this.score,

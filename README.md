@@ -1,16 +1,41 @@
-# taptap
+# 项目：仿 TapTap App
 
-A new Flutter project.
+#### 一、开发环境
 
-## Getting Started
+开发工具：Vs Code
 
-This project is a starting point for a Flutter application.
+开发平台：Pixel 3a API 30
 
-A few resources to get you started if this is your first Flutter project:
+开发语言： Flutter:2.3.0-0.1.pre
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+#### 二、项目总体情况
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+目前已完成的页面有：
+
+1.启动页面<img src="./image/截屏2021-07-06 上午9.22.47.png" alt="截屏2021-07-06 上午9.22.47" style="zoom:50%;" />2.首页页面<img src="./image/截屏2021-07-06 上午9.21.34.png" alt="截屏2021-07-06 上午9.21.34" style="zoom: 33%;" />
+
+3.主游戏列表<img src="./image/截屏2021-07-06 上午9.21.47.png" alt="截屏2021-07-06 上午9.21.47" style="zoom: 33%;" />4.安装应用<img src="./image/截屏2021-07-06 上午9.21.58.png" alt="截屏2021-07-06 上午9.21.58" style="zoom:33%;" />
+
+5.抽屉页面<img src="./image/截屏2021-07-06 上午9.22.09.png" alt="截屏2021-07-06 上午9.22.09" style="zoom:33%;" />6.登陆页面 1<img src="./image/截屏2021-07-06 上午9.23.33.png" alt="截屏2021-07-06 上午9.23.33" style="zoom:33%;" />
+
+7.登陆页面 2<img src="./image/截屏2021-07-06 上午9.25.42.png" alt="截屏2021-07-06 上午9.25.42" style="zoom: 50%;" />8.登陆页面 3<img src="./image/截屏2021-07-06 上午9.27.38.png" alt="截屏2021-07-06 上午9.27.38" style="zoom: 33%;" />
+
+9.登陆页面 4<img src="./image/截屏2021-07-06 上午9.27.48.png" alt="截屏2021-07-06 上午9.27.48" style="zoom:33%;" />10.注册页面<img src="./image/截屏2021-07-06 上午9.31.04.png" alt="截屏2021-07-06 上午9.31.04" style="zoom:33%;" />
+
+11.用户中心<img src="./image/截屏2021-07-06 上午9.29.57.png" alt="截屏2021-07-06 上午9.29.57" style="zoom:33%;" />12.修改资料<img src="./image/截屏2021-07-06 上午9.31.27.png" alt="截屏2021-07-06 上午9.31.27" style="zoom:33%;" />
+
+13.游戏详情 1<img src="./image/截屏2021-07-06 上午9.28.53.png" alt="截屏2021-07-06 上午9.28.53" style="zoom:33%;" />14.游戏详情 2<img src="./image/截屏2021-07-06 上午9.29.04.png" alt="截屏2021-07-06 上午9.29.04" style="zoom:33%;" />
+
+15.评论页面 1<img src="./image/截屏2021-07-06 上午9.29.15.png" alt="截屏2021-07-06 上午9.29.15" style="zoom:33%;" />16.评论页面 2<img src="./image/截屏2021-07-06 上午9.29.24.png" alt="截屏2021-07-06 上午9.29.24" style="zoom:33%;" />
+
+17.评论页面 3<img src="./image/截屏2021-07-06 上午9.58.05.png" alt="截屏2021-07-06 上午9.58.05" style="zoom:33%;" />18.评论详情<img src="./image/截屏2021-07-06 上午9.29.32.png" alt="截屏2021-07-06 上午9.29.32" style="zoom:33%;" />
+
+19.写评论<img src="./image/截屏2021-07-06 上午9.29.42.png" alt="截屏2021-07-06 上午9.29.42" style="zoom:33%;" />
+
+#### 三、运行方式
+
+进入到 lib 目录，以非空安全方式运行：
+
+```shell
+flutter run --no-sound-null-safety
+```

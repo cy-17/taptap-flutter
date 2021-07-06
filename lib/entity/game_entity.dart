@@ -1,5 +1,6 @@
 class Game {
   int? gameId;
+  String realSocre = "0";
   String? gameName;
   String? gamePictureUrl;
   String? category;
