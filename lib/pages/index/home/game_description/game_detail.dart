@@ -271,23 +271,28 @@ class _GameDetailState extends State<GameDetail> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30)),
                   onPressed: () {
-                    DownloadService.installApk("", _game!.gameName!,
-                        (current, total) {
-                      double progress = current / total;
-                      this.setState(() {
-                        if (current == total) {
-                          status = "打开";
-                        } else
+                    if (status == "安装") {
+                      DownloadService.installApk("", _game!.gameName!,
+                          (current, total) {
+                        double progress = current / total;
+                        this.setState(() {
+                          if (current == total) {
+                            status = "打开";
+                          } else
+                            print(progress);
                           status = "正在下载：${DigitUtil.formatNum(progress, 1)}%";
+                        });
                       });
-                    });
+                    } else if (status == "打开") {
+                      DownloadService.openApk(_game!.gameName!);
+                    }
                   },
                   elevation: 2.0,
                   fillColor: AppColors.navActive,
                   child: Text(
                     status,
                     style: TextStyle(
-                        fontSize: 14,
+                        fontSize: (status == "打开" || status == "下载") ? 14 : 8,
                         color: Colors.white,
                         fontWeight: FontWeight.w600),
                   ),

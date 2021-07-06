@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:TapTap/common_widget/comment_card.dart';
 import 'package:TapTap/common_widget/loading_diglog.dart';
 import 'package:TapTap/config/app_colors.dart';
@@ -232,12 +234,12 @@ class _CommentDetailPageState extends State<CommentDetailPage>
                       ),
                     ),
                     SizedBox(
-                      height: 50,
+                      height: 20,
                     ),
                     Container(
                       height: initHeight + 0.1 > subCommentList.length * 300
                           ? initHeight + 0.1
-                          : subCommentList.length * 180,
+                          : subCommentList.length * 280,
                       child: TabBarView(
                         children: [
                           Container(),
@@ -260,96 +262,108 @@ class _CommentDetailPageState extends State<CommentDetailPage>
                   ],
                 ),
               )),
-          Divider(),
-          Container(
-            height: 50,
-            child: Row(
-              children: [
-                Flexible(
-                  flex: 5,
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    decoration: BoxDecoration(
-                        color: Colors.grey.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Center(
-                      child: TextField(
-                        controller: _textController,
-                        decoration: InputDecoration(
-                          hintText: "回复",
-                          contentPadding: EdgeInsets.fromLTRB(
-                              10, 17, 0, 12), //输入框内容部分设置padding，跳转跟icon的对其位置
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Flexible(
-                  flex: 2,
-                  child: Container(
-                    child: TextButton(
-                      child: Text(
-                        "发表",
-                        style: TextStyle(
-                            color: AppColors.navActive,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700),
-                      ),
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(
-                              Color.fromRGBO(239, 249, 251, 1)),
-                          //设置按钮的大小
-                          minimumSize: MaterialStateProperty.all(Size(50, 20)),
-                          padding: MaterialStateProperty.all(
-                              EdgeInsets.symmetric(
-                                  horizontal: 30, vertical: 6)),
-                          //外边框装饰 会覆盖 side 配置的样式
-                          shape: MaterialStateProperty.all(
-                              StadiumBorder(side: BorderSide(width: 1))),
-                          //设置边框
-                          side: MaterialStateProperty.all(
-                              BorderSide(color: Colors.white, width: 1))),
-                      onPressed: () {
-                        //1.展示加载框
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return new LoadingDialog();
-                            });
-                        CommentService.writeSubComment(
-                                widget.comment.gameId!,
-                                widget.comment.commentId!,
-                                widget.comment.commentUserId!,
-                                _textController.text)
-                            .then((value) {
-                          if (value) {
-                            Navigator.pop(context);
-                            showAlertDialog(context);
-                            Comment comment = Comment();
-                            comment.commentTime = DateTime.now().toString();
-                            comment.commentDetail = _textController.text;
-                            comment.userCoverUrl =
-                                GlobalData.userInfo!.userCoverUrl;
-                            comment.userNickName =
-                                GlobalData.userInfo!.userNickName;
+          GlobalData.userInfo == null
+              ? Container(height: 50, child: Center(child: Text("登陆后进行回复")))
+              : Column(
+                  children: [
+                    Divider(),
+                    Container(
+                      height: 50,
+                      child: Row(
+                        children: [
+                          Flexible(
+                            flex: 5,
+                            child: Container(
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              decoration: BoxDecoration(
+                                  color: Colors.grey.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Center(
+                                child: TextField(
+                                  controller: _textController,
+                                  decoration: InputDecoration(
+                                    hintText: "回复",
+                                    contentPadding: EdgeInsets.fromLTRB(10, 17,
+                                        0, 12), //输入框内容部分设置padding，跳转跟icon的对其位置
+                                    border: InputBorder.none,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            flex: 2,
+                            child: Container(
+                              child: TextButton(
+                                child: Text(
+                                  "发表",
+                                  style: TextStyle(
+                                      color: AppColors.navActive,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Color.fromRGBO(239, 249, 251, 1)),
+                                    //设置按钮的大小
+                                    minimumSize:
+                                        MaterialStateProperty.all(Size(50, 20)),
+                                    padding: MaterialStateProperty.all(
+                                        EdgeInsets.symmetric(
+                                            horizontal: 30, vertical: 6)),
+                                    //外边框装饰 会覆盖 side 配置的样式
+                                    shape: MaterialStateProperty.all(
+                                        StadiumBorder(
+                                            side: BorderSide(width: 1))),
+                                    //设置边框
+                                    side: MaterialStateProperty.all(BorderSide(
+                                        color: Colors.white, width: 1))),
+                                onPressed: () {
+                                  //1.展示加载框
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return new LoadingDialog();
+                                      });
+                                  CommentService.writeSubComment(
+                                          widget.comment.gameId!,
+                                          widget.comment.commentId!,
+                                          widget.comment.commentUserId!,
+                                          _textController.text)
+                                      .then((value) {
+                                    if (value) {
+                                      Navigator.pop(context);
+                                      showAlertDialog(context);
+                                      Comment comment = Comment();
+                                      comment.commentTime =
+                                          DateTime.now().toString();
+                                      comment.commentDetail =
+                                          _textController.text;
+                                      comment.userCoverUrl =
+                                          GlobalData.userInfo!.userCoverUrl;
+                                      comment.userNickName =
+                                          GlobalData.userInfo!.userNickName;
 
-                            this.setState(() {
-                              subCommentList.add(Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: _SubCommentCard(comment: comment),
-                              ));
-                              _textController.text = "";
-                            });
-                          }
-                        });
-                      },
-                    ),
-                  ),
-                )
-              ],
-            ),
-          )
+                                      this.setState(() {
+                                        subCommentList.add(Padding(
+                                          padding: const EdgeInsets.all(10),
+                                          child:
+                                              _SubCommentCard(comment: comment),
+                                        ));
+                                        _textController.text = "";
+                                      });
+                                    }
+                                  });
+                                },
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
         ],
       ),
     );
@@ -394,7 +408,7 @@ class _CommentCard extends StatelessWidget {
     return Container(
       height: 250,
       padding: EdgeInsets.symmetric(horizontal: 10),
-      width: MediaQuery.of(context).size.width - 20,
+      width: MediaQuery.of(context).size.width - 10,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10), color: Colors.white),
       child: Column(
@@ -413,6 +427,7 @@ class _CommentCard extends StatelessWidget {
                           : comment.userCoverUrl!,
                       fit: BoxFit.cover,
                       width: 50,
+                      height: 50,
                     ),
                   ),
                 ),
@@ -508,105 +523,101 @@ class _SubCommentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10), color: Colors.white),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 1),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 12),
-                  child: ClipOval(
-                    child: Image.network(
-                      comment.userCoverUrl!.length == 0
-                          ? "https://img0.baidu.com/it/u=1514002029,2035215441&fm=26&fmt=auto&gp=0.jpg"
-                          : comment.userCoverUrl!,
-                      fit: BoxFit.cover,
-                      width: 50,
-                    ),
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          height: 200,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: ClipOval(
+                  child: Image.network(
+                    comment.userCoverUrl!.length == 0
+                        ? "https://img0.baidu.com/it/u=1514002029,2035215441&fm=26&fmt=auto&gp=0.jpg"
+                        : comment.userCoverUrl!,
+                    fit: BoxFit.cover,
+                    width: 50,
+                    height: 50,
                   ),
                 ),
-                SizedBox(
-                  width: 5,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20.0, bottom: 10),
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20.0, bottom: 10),
+                    child: Text(
+                      comment.userNickName!,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      width: MediaQuery.of(context).size.width * 3 / 5 + 20,
                       child: Text(
-                        comment.userNickName!,
+                        comment.commentDetail!,
+                        textAlign: TextAlign.justify,
+                        maxLines: 5,
                         style: TextStyle(
                             color: Colors.black,
+                            overflow: TextOverflow.ellipsis,
                             fontSize: 15,
                             fontWeight: FontWeight.w500),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: Container(
-                        width: 285,
-                        child: Text(
-                          comment.commentDetail!,
-                          textAlign: TextAlign.justify,
-                          maxLines: 10,
-                          style: TextStyle(
-                              color: Colors.black,
-                              overflow: TextOverflow.ellipsis,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 15),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.comment_bank,
+                          color: Colors.grey,
+                          size: 18,
                         ),
-                      ),
+                        SizedBox(
+                          width: 30,
+                        ),
+                        Icon(
+                          Icons.thumb_up,
+                          color: Colors.grey,
+                          size: 18,
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 4,
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 5),
+                          width: 85,
+                          child: Text(
+                            comment.commentTime!,
+                            maxLines: 1,
+                            style: TextStyle(overflow: TextOverflow.clip),
+                          ),
+                        )
+                      ],
                     ),
-                    SizedBox(
-                      height: 25,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 15),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.comment_bank,
-                            color: Colors.grey,
-                            size: 18,
-                          ),
-                          SizedBox(
-                            width: 30,
-                          ),
-                          Icon(
-                            Icons.thumb_up,
-                            color: Colors.grey,
-                            size: 18,
-                          ),
-                          SizedBox(
-                            width: 145,
-                          ),
-                          Container(
-                            width: 80,
-                            child: Text(
-                              comment.commentTime!,
-                              maxLines: 1,
-                              style: TextStyle(overflow: TextOverflow.clip),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              )
+            ],
           ),
-          Divider(),
-        ],
-      ),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10), color: Colors.white),
+        ),
+        Divider(),
+      ],
     );
   }
 }

@@ -136,76 +136,77 @@ class __ListGameCardState extends State<_ListGameCard> {
               ),
             ),
           ),
-          SizedBox(
-            width: 8,
-          ),
           Expanded(
-            child: InkWell(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            GameDetail(gameId: widget.game.gameId)));
-              },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 150,
-                    child: Text(
-                      widget.game.gameName!,
-                      maxLines: 2,
-                      overflow: TextOverflow.fade,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.star,
-                        color: AppColors.navActive,
-                        size: 15,
-                      ),
-                      SizedBox(
-                        width: 3,
-                      ),
-                      Text(
-                        widget.game.score.toString(),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 6),
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              GameDetail(gameId: widget.game.gameId)));
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 150,
+                      child: Text(
+                        widget.game.gameName!,
+                        maxLines: 2,
+                        overflow: TextOverflow.fade,
                         style: TextStyle(
-                            color: AppColors.navActive,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700),
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600),
                       ),
-                      SizedBox(
-                        width: 3,
-                      ),
-                      Container(
-                        width: 140,
-                        child: Text(
-                          widget.game.category
-                              .toString()
-                              .replaceAll("[", "")
-                              .replaceAll("]", "")
-                              .replaceAll(",", " "),
-                          overflow: TextOverflow.clip,
-                          maxLines: 1,
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.star,
+                          color: AppColors.navActive,
+                          size: 15,
+                        ),
+                        SizedBox(
+                          width: 3,
+                        ),
+                        Text(
+                          widget.game.score.toString(),
                           style: TextStyle(
-                              color: Colors.grey,
+                              color: AppColors.navActive,
                               fontSize: 15,
                               fontWeight: FontWeight.w700),
                         ),
-                      ),
-                    ],
-                  )
-                ],
+                        SizedBox(
+                          width: 3,
+                        ),
+                        Container(
+                          width: 140,
+                          child: Text(
+                            widget.game.category
+                                .toString()
+                                .replaceAll("[", "")
+                                .replaceAll("]", "")
+                                .replaceAll(",", " ")
+                                .substring(0, 8),
+                            overflow: TextOverflow.clip,
+                            maxLines: 1,
+                            style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
           ),
@@ -218,7 +219,7 @@ class __ListGameCardState extends State<_ListGameCard> {
                   if (current == total) {
                     _content = "打开";
                   } else
-                    _content = "${DigitUtil.formatNum(progress, 1)}%";
+                    _content = "${DigitUtil.formatNum(progress * 100, 1)}%";
                 });
               });
             },
@@ -232,7 +233,7 @@ class __ListGameCardState extends State<_ListGameCard> {
                 //设置按钮的大小
                 minimumSize: MaterialStateProperty.all(Size(50, 20)),
                 padding: MaterialStateProperty.all(
-                    EdgeInsets.symmetric(horizontal: 24, vertical: 6)),
+                    EdgeInsets.symmetric(horizontal: 18, vertical: 6)),
                 //外边框装饰 会覆盖 side 配置的样式
                 shape: MaterialStateProperty.all(
                     StadiumBorder(side: BorderSide(width: 1))),

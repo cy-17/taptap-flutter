@@ -98,56 +98,58 @@ class _PinPutDialogState extends State<PinPutDialog> {
                         style: TextStyle(color: Colors.red),
                       )
                     : Text("短信验证码已发送至+86 ${widget.phone}"),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 8, vertical: 30),
-                  child: PinPut(
-                      fieldsCount: 6,
-                      eachFieldWidth: 30,
-                      eachFieldHeight: 50,
-                      onSubmit: (String pin) {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return new LoadingDialog();
-                            });
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 0, vertical: 30),
+                    child: PinPut(
+                        fieldsCount: 6,
+                        eachFieldWidth: 30,
+                        eachFieldHeight: 50,
+                        onSubmit: (String pin) {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return new LoadingDialog();
+                              });
 
-                        UserService.checkValidCode(widget.phone, pin)
-                            .then((value) {
-                          this.setState(() {});
-                          if (value.code == 1) {
-                            GlobalData.userInfo = UserInfo(
-                                value.map["user"]['userNickName'],
-                                value.map["user"]['userPhoneNumber'],
-                                value.map["user"]['userCoverUrl']);
-                            UserService.login(widget.phone).then((value) {
+                          UserService.checkValidCode(widget.phone, pin)
+                              .then((value) {
+                            this.setState(() {});
+                            if (value.code == 1) {
+                              GlobalData.userInfo = UserInfo(
+                                  value.map["user"]['userNickName'],
+                                  value.map["user"]['userPhoneNumber'],
+                                  value.map["user"]['userCoverUrl']);
+                              UserService.login(widget.phone).then((value) {
+                                _timer.cancel();
+                                GlobalData.userInfo!.userId = value;
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              });
+                            } else if (value.code == 204) {
                               _timer.cancel();
-                              GlobalData.userInfo!.userId = value;
                               Navigator.pop(context);
                               Navigator.pop(context);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          RegisterPage(phone: widget.phone)));
+                            } else {
                               Navigator.pop(context);
-                            });
-                          } else if (value.code == 204) {
-                            _timer.cancel();
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        RegisterPage(phone: widget.phone)));
-                          } else {
-                            Navigator.pop(context);
-                            this.setState(() {
-                              errMsg = value.message;
-                            });
-                          }
-                        });
-                      },
-                      focusNode: _pinPutFocusNode,
-                      controller: _pinPutController,
-                      submittedFieldDecoration: _pinPutDecoration,
-                      selectedFieldDecoration: _pinPutDecoration,
-                      followingFieldDecoration: _pinPutDecoration),
+                              this.setState(() {
+                                errMsg = value.message;
+                              });
+                            }
+                          });
+                        },
+                        focusNode: _pinPutFocusNode,
+                        controller: _pinPutController,
+                        submittedFieldDecoration: _pinPutDecoration,
+                        selectedFieldDecoration: _pinPutDecoration,
+                        followingFieldDecoration: _pinPutDecoration),
+                  ),
                 ),
                 _time > 0
                     ? Row(

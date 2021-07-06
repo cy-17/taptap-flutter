@@ -126,6 +126,8 @@ class __DrawerListViewState extends State<_DrawerListView> {
                       child: Image.network(
                         GlobalData.userInfo!.userCoverUrl!,
                         fit: BoxFit.cover,
+                        width: 80,
+                        height: 80,
                       ),
                     )
                   : ClipOval(
@@ -513,10 +515,13 @@ class _PersonImage extends StatelessWidget {
         },
         child: ClipOval(
           child: Image.network(
-              GlobalData.userInfo == null
-                  ? "https://cyw-file.oss-cn-beijing.aliyuncs.com/loginImage.png"
-                  : GlobalData.userInfo!.userCoverUrl!,
-              fit: BoxFit.cover),
+            GlobalData.userInfo == null
+                ? "https://cyw-file.oss-cn-beijing.aliyuncs.com/loginImage.png"
+                : GlobalData.userInfo!.userCoverUrl!,
+            fit: BoxFit.cover,
+            width: 35,
+            height: 35,
+          ),
         ),
       ),
     );

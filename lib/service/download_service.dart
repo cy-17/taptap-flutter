@@ -47,6 +47,19 @@ class DownloadService {
     print(_result.message);
   }
 
+  static Future<Null> openApk(String gameName) async {
+    Map<Permission, PermissionStatus> statuses =
+        await [Permission.requestInstallPackages, Permission.storage].request();
+
+    if (statuses[Permission.storage] == PermissionStatus.denied) return;
+    Directory? storageDir = await getExternalStorageDirectory();
+    String storagePath = storageDir!.path + '/$gameName.apk';
+
+    File file = new File(storagePath);
+    final _result = await OpenFile.open(file.path);
+    print(_result.message);
+  }
+
   static Future<bool> apkExist(String gameName) async {
     Map<Permission, PermissionStatus> statuses =
         await [Permission.requestInstallPackages, Permission.storage].request();

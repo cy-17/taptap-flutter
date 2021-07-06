@@ -4,19 +4,18 @@ import 'package:TapTap/common_widget/loading_diglog.dart';
 import 'package:TapTap/common_widget/pinput_dialog.dart';
 import 'package:TapTap/common_widget/toast_dialog.dart';
 import 'package:TapTap/config/app_colors.dart';
-import 'package:TapTap/pages/index/login/login_page_with_email.dart';
 import 'package:TapTap/service/user_service.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class LoginPageWithEmail extends StatefulWidget {
+  const LoginPageWithEmail({Key? key}) : super(key: key);
 
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  bool _checkBox = false;
+class _LoginPageState extends State<LoginPageWithEmail> {
+  bool _checkBox = true;
   var _textController;
   String errMsg = "";
 
@@ -71,23 +70,6 @@ class _LoginPageState extends State<LoginPage> {
                       child: Row(
                         children: [
                           Flexible(
-                            flex: 220,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: Text(
-                                "CN+86",
-                                style: TextStyle(fontSize: 13),
-                              ),
-                            ),
-                          ),
-                          Flexible(
-                            flex: 4,
-                            child: Container(
-                              height: 25,
-                              color: Colors.grey.withOpacity(0.5),
-                            ),
-                          ),
-                          Flexible(
                             flex: 460,
                             child: Container(
                               child: TextField(
@@ -96,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                                   this.setState(() {});
                                 },
                                 decoration: InputDecoration(
-                                  hintText: "请输入手机号码",
+                                  hintText: "请输入邮箱地址",
                                   contentPadding: EdgeInsets.fromLTRB(10, 17, 0,
                                       12), //输入框内容部分设置padding，跳转跟icon的对其位置
                                   border: InputBorder.none,
@@ -136,17 +118,6 @@ class _LoginPageState extends State<LoginPage> {
                             ],
                           )
                         : Container(),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 45,
-                        ),
-                        Text(
-                          "未注册用户验证后将自动注册并登陆",
-                          style: TextStyle(color: Colors.grey, fontSize: 13),
-                        ),
-                      ],
-                    ),
                     Center(
                       child: Padding(
                         padding: EdgeInsets.only(top: 35, bottom: 5),
@@ -172,7 +143,6 @@ class _LoginPageState extends State<LoginPage> {
                               });
                               return;
                             }
-
                             //1.展示加载框
                             showDialog(
                                 context: context,
@@ -277,20 +247,11 @@ class _LoginPageState extends State<LoginPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        LoginPageWithEmail()));
-                          },
-                          child: Text(
-                            "老用户邮箱登陆",
-                            style: TextStyle(
-                                color: AppColors.navActive,
-                                fontWeight: FontWeight.w500),
-                          ),
+                        Text(
+                          "手机号登陆或注册",
+                          style: TextStyle(
+                              color: AppColors.navActive,
+                              fontWeight: FontWeight.w500),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 1.0),

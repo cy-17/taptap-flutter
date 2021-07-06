@@ -81,6 +81,7 @@ class UserService {
     FormData formData = FormData.fromMap({"file": image});
     Map<String, dynamic> response =
         await Http.post("$BASEURL/login/register/uploadCover", data: formData);
+
     return RESPONSE(
         code: response['code'],
         message: response['message'],

@@ -124,37 +124,38 @@ class _GameDescription extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: Row(
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 160,
-                child: Text(
-                  game.gameName!,
-                  maxLines: 1,
-                  overflow: TextOverflow.visible,
-                  style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 130,
+                  child: Text(
+                    game.gameName!,
+                    maxLines: 1,
+                    overflow: TextOverflow.visible,
+                    style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black),
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 1,
-              ),
-              Container(
-                constraints: BoxConstraints(maxWidth: 260),
-                child: Text(
-                  game.description!,
-                  style: TextStyle(fontSize: 15),
-                  textAlign: TextAlign.left,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+                SizedBox(
+                  height: 1,
                 ),
-              ),
-            ],
+                Container(
+                  constraints: BoxConstraints(maxWidth: 260),
+                  child: Text(
+                    game.description!,
+                    style: TextStyle(fontSize: 15),
+                    textAlign: TextAlign.left,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
           ),
-          Spacer(),
           Padding(
             padding: EdgeInsets.only(bottom: 20, right: 10, left: 10),
             child: Column(

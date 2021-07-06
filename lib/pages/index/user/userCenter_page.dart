@@ -75,6 +75,7 @@ class _UserCenterPageState extends State<UserCenterPage>
                                           GlobalData.userInfo!.userCoverUrl!,
                                           fit: BoxFit.cover,
                                           width: 60,
+                                          height: 60,
                                         ),
                                       ),
                                     ),
@@ -422,12 +423,14 @@ class __CommentCardState extends State<_CommentCard> {
                 child: Row(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(top: 12, left: 5),
+                      padding:
+                          const EdgeInsets.only(top: 12, left: 5, bottom: 10),
                       child: ClipOval(
                         child: Image.network(
                           GlobalData.userInfo!.userCoverUrl!,
                           fit: BoxFit.cover,
                           width: 50,
+                          height: 50,
                         ),
                       ),
                     ),

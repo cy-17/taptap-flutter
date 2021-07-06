@@ -213,13 +213,14 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
                     fillColor: AppColors.navActive,
                     child: Text(
                       "发表",
+                      maxLines: 1,
                       style: TextStyle(
                           fontSize: 14,
                           color: Colors.white,
                           fontWeight: FontWeight.w600),
                     ),
                     padding:
-                        EdgeInsets.symmetric(vertical: 12, horizontal: 170),
+                        EdgeInsets.symmetric(vertical: 12, horizontal: 140),
                   ),
                 ),
               ),

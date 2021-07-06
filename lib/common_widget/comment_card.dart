@@ -53,6 +53,7 @@ class _CommentCardState extends State<CommentCard> {
                             : widget.comment.userCoverUrl!,
                         fit: BoxFit.cover,
                         width: 50,
+                        height: 50,
                       ),
                     ),
                   ),
