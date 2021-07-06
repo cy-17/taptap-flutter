@@ -165,6 +165,7 @@ class _LoginPageState extends State<LoginPage> {
                                 timer.cancel();
                                 Navigator.pop(context);
                               });
+                              return;
                             }
                             if (_textController.text == "") {
                               this.setState(() {
